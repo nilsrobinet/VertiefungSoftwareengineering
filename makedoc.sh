@@ -3,8 +3,7 @@
 pushd .
 cd docu/ausarbeitung
 mkdir -p out
-cd out
+mkdir -p out/chapters
 
-pdflatex ../main.tex
-#pdflatex main.dvi 
+pdflatex -aux_directory=out -output-directory=out main.tex 
 popd
