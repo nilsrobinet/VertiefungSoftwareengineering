@@ -1,0 +1,7 @@
+# General
+*.swp
+
+# Latex output
+docu/ausarbeitung/out
+
+
