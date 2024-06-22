@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        docker { dockerfile true}
+    }
 
     stages {
         stage('Build') {
@@ -10,6 +12,12 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
+            }
+        }
+        stage('Docu') {
+            steps {
+                echo 'Building Documentation...'
+                sh './build_scripts/makedoc.sh'
             }
         }
         stage('Deploy') {

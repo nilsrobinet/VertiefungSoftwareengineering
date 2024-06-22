@@ -30,10 +30,16 @@ Zur erstellung und installation wurden folgende Schritte durch geführt:
     \lstinline[language=sh]!pacman -S fontconfig!\\
     \lstinline[language=sh]!pacman -S freetype2!\\
     \lstinline[language=sh]!pacman -S jenkins!\\
+    \lstinline[language=sh]!pacman -S docker!\\
+    \lstinline[language=sh]!pacman -S git!\\
     \lstinline[language=sh]!systemctl enable jenkins!\\
+    \lstinline[language=sh]!systemctl enable docker!\\
+    \lstinline[language=sh]!systemctl start jenkins!\\
+    \lstinline[language=sh]!systemctl start docker!\\
     \item Nach der installation kann über den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setupdialog muss ausgewählt werden ob die standard plugins installiert werden sollen und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
 \end{enumerate}
 
 \subsection{Projekt einrichtung}
 
-Unter dem Punkt "new job" wird ein neuer Multibranch Pipeline Job angelegt. Der Job wird durch das Jenkinsfile, das im Repository eingecheckt ist konfiguriert
+Unter dem Punkt "new job" wird ein neuer Multibranch Pipeline Job angelegt. Der Job wird durch das Jenkinsfile, das im Repository eingecheckt ist konfiguriert.
+Im Jenkinsfile sind 3 Stages, je eine für build, test und deploy, definiert. Außerdem wird in der agent Sektion der Datei das dockerimage, dass für den build verwendet werden soll angegeben. Das Docker image wird durch das Dockerfile, dass im ordner build\_scripts liegt beschrieben.

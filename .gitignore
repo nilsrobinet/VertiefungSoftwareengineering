@@ -1,6 +1,8 @@
 # General
 *.swp
 build/**
+*.log
+*.qcow2
 
 # Latex output
 docu/ausarbeitung/out
