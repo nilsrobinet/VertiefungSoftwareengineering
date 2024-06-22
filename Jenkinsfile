@@ -1,4 +1,5 @@
 pipeline {
+    triggers { pollSCM('H */4 * * *') }
     agent {
         docker { dockerfile true}
     }
