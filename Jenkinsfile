@@ -1,9 +1,11 @@
 pipeline {
     triggers { pollSCM('H */4 * * *') }
     agent {
-        docker { dockerfile true}
+        dockerfile {
+            filename 'Dockerfile'
+            dir '.'
+        }
     }
-
     stages {
         stage('Build') {
             steps {
