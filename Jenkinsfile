@@ -27,4 +27,9 @@ pipeline {
             }
         }
     }
+    post {
+        allways {
+            archiveArtifacts artifacts: 'build/docu/**/*.pdf', onlyIfSuccessful: true
+        }
+    }
 }
