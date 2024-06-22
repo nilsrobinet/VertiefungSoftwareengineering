@@ -28,7 +28,7 @@ pipeline {
         }
     }
     post {
-        allways {
+        changed {
             archiveArtifacts artifacts: 'build/docu/**/*.pdf', onlyIfSuccessful: true
         }
     }
