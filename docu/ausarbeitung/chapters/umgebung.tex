@@ -2,13 +2,38 @@
 
 Für das Projekt sollte eine \acf{CI/CD} Pipline angelegt werden. Zu diesem Zweck wird ein Build Server in einer \acf{VM} gestartet.
 
-\section{\ac{VM} installation}
+\section{Werkzeuge und Anwendungen}
 
-Als \ac{VM} wurde sich für Ubuntu 24.04 Server entschieden, da diese Version eine \acf{LTS} Version ist, kann sie für einen längeren Zeitraum verwendet werden ohne das man ein Betriebsystem Upgrade durchführen muss, bei dem es zu Soft- und Hardware inkompatibilitäten kommen kann. Die Server Version wurde ausgewählt, da für die Verwendung als Build Server keine grafische Benutzeroberfläche benötigt wird. Als virtualisierungs Lösung wird die open source Software QEMU eingesetzt.
+Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in chap TODO). Um das remote repository zu managen wird auf Github gesetzt. Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server läuft in einer \ac{VM}. Als Virtualisierungslösung wurde QEMU/KVM ausgewählt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
 
-\subsection{QEMU Setup}
+\section{Build-Server Setup}
 
-Für den einsatz von QEMU unter Windows wird MYSYS2 benötigt. MYSYS2 ist eine Software Distributionsplatform basierend auf Cygwin. Cygwin ist ein Projekt das viele Tools aus dem GNU/LINUX Umfeld für Windows portiert und so ein Linux ähnliches arbeiten ermöglicht. Unteranderem bringt MYSYS2 den aus der Linux Distribution Arch bekannten Packetmanager pacman mit die hier genutzt werden kann um QEMU zu installieren.
- 
-Auf den üblichen Linux Distibutionen lässt sich QEMU einfach über die Packetverwaltung installieren.
+Als Guest-Beriebsystem wurde sich für Arch Linux entschieden, da von diesem Betriebsystem bereits fertig vorgebaute \ac{VM} images bereit gestellt werden (\url{https://gitlab.archlinux.org/archlinux/arch-boxes/-/packages}). Unter anderem wird ein qcow2 image das in der Virtualisierungsumgebung QEMU eingesetzt werden kann bereit gestellt.
+In der \ac{VM} wird ein Jenkins build server installiert, der die CI/CD pipline bedient.
 
+\subsection{Installation}
+
+Die Build-Server \ac{VM} wurde auf ein Arch Linux System erstellt, einzellne Schritte, insbesondere wenn eine Packetverwaltungssoftware eingesetzt wird können sich zwischen den verschiedenen Betriebsystemen unterscheiden.
+Zur erstellung und installation wurden folgende Schritte durch geführt:
+
+\begin{enumerate}
+    \item Datenträgerabbild herunter laden:\\
+        \lstinline[language=sh]!wget -O build_server.qcow2 https://gitlab.archlinux.org/archlinux/arch-boxes/-/package_files/6852/download!
+    \item Virtuelle Machine Starten:\\
+    \lstinline[language=sh]!qemu-system-x86_64 -m 4G -smp 4 -enable-kvm\! \\
+    \lstinline[language=sh]!                   -nic user,hostfwd=tcp::60022-:22,hostfwd=tcp::8090-:8090\ !\\
+    \lstinline[language=sh]!                   build_server.qcow2!\\
+    Der Benutzername und das Standartpasswort lauten: arch/arch; Man kann sich nun mittels ssh mit der \ac{VM} verbinden:\\
+    \lstinline[language=sh]!ssh arch@localhost -p 60022!\\
+    \item Jenkins installieren:\\
+    \lstinline[language=sh]!pacman -Syu !\\
+    \lstinline[language=sh]!pacman -S fontconfig!\\
+    \lstinline[language=sh]!pacman -S freetype2!\\
+    \lstinline[language=sh]!pacman -S jenkins!\\
+    \lstinline[language=sh]!systemctl enable jenkins!\\
+    \item Nach der installation kann über den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setupdialog muss ausgewählt werden ob die standard plugins installiert werden sollen und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
+\end{enumerate}
+
+\subsection{Projekt einrichtung}
+
+Unter dem Punkt "new job" wird ein neuer Multibranch Pipeline Job angelegt. Der Job wird durch das Jenkinsfile, das im Repository eingecheckt ist konfiguriert

@@ -1,9 +1,7 @@
 # Dieses Script dient dazu das gesamte Projekt inklusive Ausarbeitung und Präsentation zu bauen
 
-pushd .
-cd docu/ausarbeitung
-mkdir -p out
-mkdir -p out/chapters
+mkdir -p build/docu
+mkdir -p build/docu/chapters
+tectonic -X compile --outfmt pdf --outdir build/docu/ --keep-intermediates docu/ausarbeitung/main.tex
 
-pdflatex -aux_directory=out -output-directory=out main.tex 
-popd
+#TODO: html documentation
