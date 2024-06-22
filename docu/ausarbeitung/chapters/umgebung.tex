@@ -36,6 +36,7 @@ Zur erstellung und installation wurden folgende Schritte durch geführt:
     \lstinline[language=sh]!systemctl enable docker!\\
     \lstinline[language=sh]!systemctl start jenkins!\\
     \lstinline[language=sh]!systemctl start docker!\\
+    \lstinline[language=sh]!sudo usermod -aG docker jenkins!\\
     \item Nach der installation kann über den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setupdialog muss ausgewählt werden ob die standard plugins installiert werden sollen und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
 \end{enumerate}
 
