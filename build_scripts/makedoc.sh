@@ -1,5 +1,6 @@
 # Dieses Script dient dazu die dokumentation zum projekt zu bauen
 
+mkdir -p build
 mkdir -p build/docu
 mkdir -p build/docu/chapters
 
