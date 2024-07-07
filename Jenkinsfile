@@ -10,11 +10,15 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                sh './build_scripts/makeC.sh'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                ctest arguments: '''
+                --test-dir build/Release/test/
+                ''' 
             }
         }
         stage('Docu') {
