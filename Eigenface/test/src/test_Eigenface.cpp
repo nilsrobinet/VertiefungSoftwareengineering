@@ -28,15 +28,17 @@ TEST(test_Eigenface, test_avgVector) {
 }
 
 TEST(test_Eigenface, test_normalize) {
+    constexpr int dim = 4;
+    constexpr int numVec = 4;
     VectorList_t<dim, numVec> testVectorList_1 = {{
         { 1.0 , 1.0, 1.0, 1.0  },
         { 1.0 , 1.0, 1.0, 1.0  },
         { 1.0 , 1.0, 1.0, 1.0  },
         { 1.0 , 1.0, 1.0, 1.0  },
     }};
-    Vector_t normVec = {2.0, 5.0, 1.0, 0.0};
+    Vector_t<dim> normVec = {2.0, 5.0, 1.0, 0.0};
 
-    Eigenface::normalize(testVectorList_1, normVec);
+    Eigenface::normalize<dim,numVec>(testVectorList_1, normVec);
     
     VectorList_t<dim, numVec> expected1 = {{
         { -1.0 , -4.0, 0.0, 1.0  },
@@ -44,5 +46,5 @@ TEST(test_Eigenface, test_normalize) {
         { -1.0 , -4.0, 0.0, 1.0  },
         { -1.0 , -4.0, 0.0, 1.0  },
     }};
-    EXPECT_EQ(testVectorList_1, expected1) 
+    EXPECT_EQ(testVectorList_1, expected1); 
 }
