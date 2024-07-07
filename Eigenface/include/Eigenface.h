@@ -7,10 +7,10 @@ template<uint16_t dim, uint16_t numVectors>
 using VectorList_t = std::array<Vector_t<dim>, numVectors>;
 
 template<uint16_t x, uint16_t y>
-using Image_t = std::array<std::array<float, y>, x>;
+using Matrix_t = std::array<std::array<float, y>, x>;
 
 template<uint16_t x, uint16_t y, uint16_t numImages>
-using ImageList_t = std::array<Image_t<x,y>, numImages>;
+using MatrixList_t = std::array<Matrix_t<x,y>, numImages>;
 
 class Eigenface {
 public:
