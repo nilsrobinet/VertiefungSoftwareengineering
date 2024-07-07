@@ -16,11 +16,9 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                ctest
-                    installation: 'InSearchPath' 
-                    arguments: '''
+                ctest arguments: '''
                 --test-dir build/Release/test/
-                ''' 
+                ''', installation: 'InSearchPath'
             }
         }
         stage('Docu') {
