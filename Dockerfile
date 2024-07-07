@@ -7,4 +7,5 @@ RUN apt install -y texlive\
     texlive-lang-german\
     texlive-latex-extra\
     texlive-science
-
+RUN apt install -y cmake make gcc g++
+    
