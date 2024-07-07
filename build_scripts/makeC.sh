@@ -2,8 +2,6 @@ mkdir -p build
 
 ROOT_DIR=`pwd`
 
-pushd .
-
 cd build
 
 if [ -z "$1" ]; then
@@ -27,4 +25,4 @@ else
     echo "************************************"
 fi
 
-popd
+cd $ROOT_DIR

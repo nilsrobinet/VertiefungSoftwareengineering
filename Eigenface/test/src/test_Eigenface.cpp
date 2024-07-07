@@ -25,6 +25,24 @@ TEST(test_Eigenface, test_avgVector) {
     std::array<float, dim> expected2 = {1.0,0.75,0.5,0.25};
     EXPECT_EQ(result1, expected1);
     EXPECT_EQ(result2, expected2);
-
 }
 
+TEST(test_Eigenface, test_normalize) {
+    VectorList_t<dim, numVec> testVectorList_1 = {{
+        { 1.0 , 1.0, 1.0, 1.0  },
+        { 1.0 , 1.0, 1.0, 1.0  },
+        { 1.0 , 1.0, 1.0, 1.0  },
+        { 1.0 , 1.0, 1.0, 1.0  },
+    }};
+    Vector_t normVec = {2.0, 5.0, 1.0, 0.0};
+
+    Eigenface::normalize(testVectorList_1, normVec);
+    
+    VectorList_t<dim, numVec> expected1 = {{
+        { -1.0 , -4.0, 0.0, 1.0  },
+        { -1.0 , -4.0, 0.0, 1.0  },
+        { -1.0 , -4.0, 0.0, 1.0  },
+        { -1.0 , -4.0, 0.0, 1.0  },
+    }};
+    EXPECT_EQ(testVectorList_1, expected1) 
+}
