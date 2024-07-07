@@ -9,6 +9,7 @@ echo "ROOT_DIR is $ROOT_DIR"
 
 cd docu/ausarbeitung/
 pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
+pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
 cd $ROOT_DIR
 
 #TODO: html documentation

@@ -37,10 +37,15 @@ Zur erstellung und installation wurden folgende Schritte durch gefÃ¼hrt:
     \lstinline[language=sh]!systemctl start jenkins!\\
     \lstinline[language=sh]!systemctl start docker!\\
     \lstinline[language=sh]!sudo usermod -aG docker jenkins!\\
-    \item Nach der installation kann Ã¼ber den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setupdialog muss ausgewÃ¤hlt werden ob die standard plugins installiert werden sollen und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
+    \item Nach der installation kann Ã¼ber den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setup-dialog muss ausgewÃ¤hlt werden ob dieStandar-Plugins installiert werden sollen, hier sollte mit ja geantwortet werden, und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
+
+ZusÃtzlich wird noch das Plugin "Docker Pipeline" benÃtigt, das es ermÃglicht in docker images zu bauen.
 \end{enumerate}
 
 \subsection{Projekt einrichtung}
 
-Unter dem Punkt "new job" wird ein neuer Multibranch Pipeline Job angelegt. Der Job wird durch das Jenkinsfile, das im Repository eingecheckt ist konfiguriert.
-Im Jenkinsfile sind 3 Stages, je eine fÃ¼r build, test und deploy, definiert. AuÃŸerdem wird in der agent Sektion der Datei das dockerimage, dass fÃ¼r den build verwendet werden soll angegeben. Das Docker image wird durch das Dockerfile, dass im ordner build\_scripts liegt beschrieben.
+Unter dem Punkt "new job" wird ein neuer Multibranch Pipeline Job angelegt und Konfiguriert. Als Branch Source wird das github Repo dieses Projekts angegeben. Damit jenkins auf das Projekt zu greifen kann mÃssen noch Github credentials eingrtragen werden. 
+
+Damit Jenkins Änderungen zeitnah erkennt wir ein periodischer Trigger mit einem Intervall von einer Minute eingestellt. Danach ist das Projekt fertig konfiguriert und kann benutzt werden.
+
+Die Build und Deployment stages werden durch das im Repositroy eingecheckte Jenkinsfile konfgiuriert. Der build findet in einem Docker-Container statt der durch ein Dockerfile, das ebenfalls eingecheckt ist, erstellt wird. Das docker image wird durch Jenkins gemanaged, jeknins kÃmmert sich auch darum das Dockerimage bei Änderungen am Dockerfile neu zu generieren.
