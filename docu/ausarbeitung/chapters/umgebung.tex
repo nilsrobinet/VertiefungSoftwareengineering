@@ -1,20 +1,20 @@
 \chapter{Entwicklungsumgebung}
 
-FÃ¼r das Projekt sollte eine \acf{CI/CD} Pipline angelegt werden. Zu diesem Zweck wird ein Build Server in einer \acf{VM} gestartet.
+Für das Projekt sollte eine \acf{CI/CD} Pipline angelegt werden. Zu diesem Zweck wird ein Build Server in einer \acf{VM} gestartet.
 
 \section{Werkzeuge und Anwendungen}
 
-Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in chap TODO). Um das remote repository zu managen wird auf Github gesetzt. Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server lÃ¤uft in einer \ac{VM}. Als VirtualisierungslÃ¶sung wurde QEMU/KVM ausgewÃ¤hlt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
+Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in chap TODO). Um das remote repository zu managen wird auf Github gesetzt. Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server lÃ¤uft in einer \ac{VM}. Als VirtualisierungslÃ¶sung wurde QEMU/KVM ausgewählt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
 
 \section{Build-Server Setup}
 
-Als Guest-Beriebsystem wurde sich fÃ¼r Arch Linux entschieden, da von diesem Betriebsystem bereits fertig vorgebaute \ac{VM} images bereit gestellt werden (\url{https://gitlab.archlinux.org/archlinux/arch-boxes/-/packages}). Unter anderem wird ein qcow2 image das in der Virtualisierungsumgebung QEMU eingesetzt werden kann bereit gestellt.
+Als Guest-Beriebsystem wurde sich für Arch Linux entschieden, da von diesem Betriebsystem bereits fertig vorgebaute \ac{VM} images bereit gestellt werden (\url{https://gitlab.archlinux.org/archlinux/arch-boxes/-/packages}). Unter anderem wird ein qcow2 image das in der Virtualisierungsumgebung QEMU eingesetzt werden kann bereit gestellt.
 In der \ac{VM} wird ein Jenkins build server installiert, der die CI/CD pipline bedient.
 
 \subsection{Installation}
 
 Die Build-Server \ac{VM} wurde auf ein Arch Linux System erstellt, einzellne Schritte, insbesondere wenn eine Packetverwaltungssoftware eingesetzt wird kÃ¶nnen sich zwischen den verschiedenen Betriebsystemen unterscheiden.
-Zur erstellung und installation wurden folgende Schritte durch gefÃ¼hrt:
+Zur erstellung und installation wurden folgende Schritte durch geführt:
 
 \begin{enumerate}
     \item DatentrÃ¤gerabbild herunter laden:\\
@@ -37,9 +37,9 @@ Zur erstellung und installation wurden folgende Schritte durch gefÃ¼hrt:
     \lstinline[language=sh]!systemctl start jenkins!\\
     \lstinline[language=sh]!systemctl start docker!\\
     \lstinline[language=sh]!sudo usermod -aG docker jenkins!\\
-    \item Nach der installation kann Ã¼ber den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setup-dialog muss ausgewÃ¤hlt werden ob dieStandar-Plugins installiert werden sollen, hier sollte mit ja geantwortet werden, und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
+    \item Nach der installation kann über den Webserver auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setup-dialog muss ausgewÃ¤hlt werden ob dieStandar-Plugins installiert werden sollen, hier sollte mit ja geantwortet werden, und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
 
-ZusÃtzlich wird noch das Plugin "Docker Pipeline" benÃtigt, das es ermÃglicht in docker images zu bauen.
+Zusätzlich wird noch das Plugin "Docker Pipeline" benötigt, das es ermöglicht in docker images zu bauen.
 \end{enumerate}
 
 \subsection{Projekt einrichtung}
