@@ -42,7 +42,7 @@ public:
     static void normalize(VectorList_t<dim,numVectors>& vectorList, Vector_t<dim>& normVec) {
          for (auto vectorIndex = 0; vectorIndex < numVectors; vectorIndex++) {
             for (auto elemIndex = 0; elemIndex < dim; elemIndex++) {
-                vectorList[vectorIndex][elemIndex] - normVec[elemIndex];
+                vectorList[vectorIndex][elemIndex] = vectorList[vectorIndex][elemIndex] - normVec[elemIndex];
             }
          }
     }
