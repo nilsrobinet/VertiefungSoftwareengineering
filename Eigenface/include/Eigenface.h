@@ -21,7 +21,7 @@ public:
      * @returns average vector
      */
     template <int dim, int numVectors>
-    static std::array<float,dim> averageVector( VectorList_t<dim,numVectors> vectorList ) {
+    static std::array<float,dim> averageVector(const VectorList_t<dim,numVectors>& vectorList ) {
         std::array<float, dim> averageVector;
         averageVector.fill(0);
         for (int vecIdx = 0; vecIdx < numVectors; vecIdx++) {
@@ -39,18 +39,29 @@ public:
       * Normalize a list of vectors by subtracting another vector
       */
     template <int dim, int numVectors>
-    static void normalize(VectorList_t<dim,numVectors>& vectorList, Vector_t<dim>& normVec) {
+    static void normalize(VectorList_t<dim,numVectors>& vectorList, const Vector_t<dim>& normVec) {
          for (auto vectorIndex = 0; vectorIndex < numVectors; vectorIndex++) {
             for (auto elemIndex = 0; elemIndex < dim; elemIndex++) {
                 vectorList[vectorIndex][elemIndex] = vectorList[vectorIndex][elemIndex] - normVec[elemIndex];
             }
          }
     }
-    
-    //template <uint16_t x, uint16_t y, uint16_t numImages>
-    //static void calculateEigenfaces(ImageList_t<x,y,numImages> imageList ){
-    //    ;
-    //};
+
+    /**
+      * Transpose a matrix
+      * 
+      * @returns a new matirx containing the transposed matrix
+      */
+    template <int x, int y>
+    static Matrix_t<y,x> transpose(const Matrix_t<x,y>& mat) {
+        Matrix_t<y,x> mat_T = {0};
+        for (auto rowIndex = 0; rowIndex < x; rowIndex++) {
+            for (auto columnIndex = 0; columnIndex < y; columnIndex++) {
+                mat_T[columnIndex][rowIndex] = mat[rowIndex][columnIndex];
+            }
+        }
+        return mat_T;
+    }
 
 };
 

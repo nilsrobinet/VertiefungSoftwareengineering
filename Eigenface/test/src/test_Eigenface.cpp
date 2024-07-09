@@ -48,3 +48,31 @@ TEST(test_Eigenface, test_normalize) {
     }};
     EXPECT_EQ(testVectorList_1, expected1); 
 }
+
+TEST(test_Eigenface, test_transpose) {
+    
+    Matrix_t<1,3> testMat_1 = {{
+                                  {2,4,6}
+                              }};
+    Matrix_t<3,2> testMat_2 = {{
+                                  {1,2},
+                                  {3,4},
+                                  {5,6}
+                              }};
+   
+    Matrix_t<3,1> expectedMat_1 = {{
+                                {2},
+                                {4},
+                                {6}
+                              }};
+
+    Matrix_t<2,3> expectedMat_2 = {{
+                                  {1,3,5},
+                                  {2,4,6}
+                              }};
+    auto result_1 = Eigenface::transpose<1,3>(testMat_1);
+    EXPECT_EQ(expectedMat_1, result_1);
+    auto result_2 = Eigenface::transpose<3,2>(testMat_2);
+    EXPECT_EQ(expectedMat_2, result_2);
+}
+
