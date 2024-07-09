@@ -88,5 +88,99 @@ public:
         return res;
      }
 
+    /*
+     * Function to normalize a vector
+     */
+    template<uint16_t n>
+    void normalizeVector(std::array<float, n>& vec) {
+        float norm = 0.0f;
+        for (uint16_t i = 0; i < n; ++i) {
+            norm += vec[i] * vec[i];
+        }
+        norm = std::sqrt(norm);
+        for (uint16_t i = 0; i < n; ++i) {
+            vec[i] /= norm;
+        }
+    }
+    
+    // Function to orthogonalize a set of vectors using Gram-Schmidt process
+    template<uint16_t n, uint16_t m>
+    void gramSchmidtOrthogonalization(Matrix_t<n, m>& vectors) {
+        for (uint16_t i = 0; i < m; ++i) {
+            for (uint16_t j = 0; j < i; ++j) {
+                float dotProduct = 0.0f;
+                for (uint16_t k = 0; k < n; ++k) {
+                    dotProduct += vectors[k][i] * vectors[k][j];
+                }
+                for (uint16_t k = 0; k < n; ++k) {
+                    vectors[k][i] -= dotProduct * vectors[k][j];
+                }
+            }
+            normalizeVector(vectors[i]);
+        }
+    }
+    
+    // Function to find the M most significant eigenvalues and eigenvectors using Orthogonal Iteration
+    template<uint16_t n, uint16_t m>
+    std::pair<std::array<float, m>, Matrix_t<n, m>> orthogonalIteration(const Matrix_t<n, n>& matrix, uint16_t maxIterations = 1000, float tolerance = 1e-6) {
+        Matrix_t<n, m> vectors = {0};
+        for (uint16_t i = 0; i < m; ++i) {
+            vectors[i][i] = 1.0f; // Initial guess for the eigenvectors
+        }
+    
+        for (uint16_t iteration = 0; iteration < maxIterations; ++iteration) {
+            // Multiply the matrix by the current set of vectors
+            Matrix_t<n, m> newVectors = {0};
+            for (uint16_t i = 0; i < m; ++i) {
+                auto columnVector = multiplyMatrixVector(matrix, vectors[i]);
+                for (uint16_t j = 0; j < n; ++j) {
+                    newVectors[j][i] = columnVector[j];
+                }
+            }
+    
+            // Orthogonalize and normalize the resulting vectors
+            gramSchmidtOrthogonalization(newVectors);
+    
+            // Check for convergence
+            float diff = 0.0f;
+            for (uint16_t i = 0; i < n; ++i) {
+                for (uint16_t j = 0; j < m; ++j) {
+                    diff += std::fabs(newVectors[i][j] - vectors[i][j]);
+                }
+            }
+            if (diff < tolerance) {
+                break;
+            }
+    
+            vectors = newVectors;
+        }
+    
+        // Compute the Rayleigh quotient for the eigenvalues
+        std::array<float, m> eigenvalues = {0};
+        for (uint16_t i = 0; i < m; ++i) {
+            auto Av = multiplyMatrixVector(matrix, vectors[i]);
+            for (uint16_t j = 0; j < n; ++j) {
+                eigenvalues[i] += vectors[j][i] * Av[j];
+            }
+        }
+    
+        return {eigenvalues, vectors};
+    }
+
+
+    /**
+     * Function to find the M most significant eigenvalues and eigenvectors
+     * using the power iteration method
+     */
+    template<uint16_t x, uint16_t y, uint16_t M>
+    std::pair<std::array<float, M>, VectorList_t<x, M>> findEigenvaluesAndEigenvectors(const Matrix_t<x, y>& matrix) {
+        // Ensure the matrix is square
+        static_assert(x == y, "Matrix must be square to calculate eigenvalues and eigenvectors");
+        static_assert(m <= x, "Number of requested eigenvectors must be less than or equal to matrix size");
+    
+        // Find the M most significant eigenvalues and eigenvectors using Orthogonal Iteration
+        return orthogonalIteration<m, m>(matrix);
+    }
+
 };
 

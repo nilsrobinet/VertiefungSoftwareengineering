@@ -87,5 +87,10 @@ TEST(test_Eigenface, test_matMul) {
                                   {2,2,2}
                               }};
     auto result = Eigenface::matMul<3,2,2,3>(testMat_1, testMat_2 );
-
+    Matrix_t<3,3> expectedMatrix = {{
+                                    {3,3,3},
+                                    {6,6,6},
+                                    {9,9,9},
+                                   }};
+    EXPECT_EQ(result, expectedMatrix);
 }
