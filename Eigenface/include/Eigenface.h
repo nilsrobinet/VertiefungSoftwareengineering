@@ -13,6 +13,10 @@ template<uint16_t x, uint16_t y, uint16_t numImages>
 using MatrixList_t = std::array<Matrix_t<x,y>, numImages>;
 
 class Eigenface {
+private:
+    // helper functions
+    static constexpr int max( int a, int b) { if (a > b) return a; else return b;};
+
 public:
     /**
      * Calculate the average vector of a list of vectors
@@ -36,8 +40,8 @@ public:
     }
 
     /**
-      * Normalize a list of vectors by subtracting another vector
-      */
+     * Normalize a list of vectors by subtracting another vector
+     */
     template <int dim, int numVectors>
     static void normalize(VectorList_t<dim,numVectors>& vectorList, const Vector_t<dim>& normVec) {
          for (auto vectorIndex = 0; vectorIndex < numVectors; vectorIndex++) {
@@ -48,10 +52,10 @@ public:
     }
 
     /**
-      * Transpose a matrix
-      * 
-      * @returns a new matirx containing the transposed matrix
-      */
+     * Transpose a matrix
+     * 
+     * @returns a new matirx containing the transposed matrix
+     */
     template <int x, int y>
     static Matrix_t<y,x> transpose(const Matrix_t<x,y>& mat) {
         Matrix_t<y,x> mat_T = {0};
@@ -62,6 +66,27 @@ public:
         }
         return mat_T;
     }
+
+    /**
+     * Multiply two matricies
+     *
+     * @returns the product of two matricies
+     */
+    template <int x1, int y1, int x2, int y2>
+    static Matrix_t<x1,y2> matMul(Matrix_t<x1,y1> mat1, Matrix_t<x2,y2> mat2) {
+        static_assert(x1 == y2);
+        static_assert(x2 == y1);    
+        Matrix_t<x1,y2> res = {0};
+        for (auto row = 0; row < x1; row++) {
+            for (auto col = 0; col < y2; col++){
+            
+                for (auto i = 0; i < x2; i++) {
+                    res[row][col] += mat1[col][i] * mat2[i][row];
+                }
+            }
+        }
+        return res;
+     }
 
 };
 

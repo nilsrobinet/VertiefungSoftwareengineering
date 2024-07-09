@@ -76,3 +76,16 @@ TEST(test_Eigenface, test_transpose) {
     EXPECT_EQ(expectedMat_2, result_2);
 }
 
+TEST(test_Eigenface, test_matMul) {
+    Matrix_t<3,2> testMat_1 = {{
+                                  {1,1},
+                                  {2,2},
+                                  {3,3}
+                              }};
+    Matrix_t<2,3> testMat_2 = {{
+                                  {1,1,1},
+                                  {2,2,2}
+                              }};
+    auto result = Eigenface::matMul<3,2,2,3>(testMat_1, testMat_2 );
+
+}
