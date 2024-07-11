@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14)
 project(my_project)
 
 # GoogleTest requires at least C++14
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
@@ -24,7 +24,8 @@ enable_testing()
 
 add_executable(
     test_Eigenface 
-    src/test_Eigenface.cpp
+    src/test_EigenfaceMathBase.cpp
+    src/test_EigenfaceEigenvectorFinder.cpp
 )
 target_link_libraries(
     test_Eigenface
