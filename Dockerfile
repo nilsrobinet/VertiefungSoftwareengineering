@@ -8,5 +8,5 @@ RUN apt install -y texlive\
     texlive-latex-extra\
     texlive-science
 RUN apt install -y cmake make gcc g++
-RUN apt install python3
+RUN apt install python3 python3-pip
 RUN python3 -m pip install -r requirements.txt     
