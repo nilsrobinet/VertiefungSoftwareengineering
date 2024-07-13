@@ -9,3 +9,7 @@ docu/ausarbeitung/out
 
 #gtest
 Testing
+
+#python
+.venv
+

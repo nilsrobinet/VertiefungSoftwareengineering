@@ -1,3 +1,4 @@
+#pragma once
 #include <cstdint>
 #include <cmath>
 
@@ -10,8 +11,8 @@ using VectorList = std::array<Vector<dim>, numVectors>;
 template<uint16_t x, uint16_t y>
 using Matrix = std::array<std::array<float, y>, x>;
 
-template<uint16_t x, uint16_t y, uint16_t numImages>
-using MatrixList = std::array<Matrix<x,y>, numImages>;
+template<uint16_t x, uint16_t y, uint16_t num>
+using MatrixList = std::array<Matrix<x,y>, num>;
 
 namespace Eigenface {
     class Math {

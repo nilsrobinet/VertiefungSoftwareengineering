@@ -1,4 +1,6 @@
+#pragma once
 #include "EigenfaceMathBase.h"
+
 
 namespace Eigenface {
     class EigenvectorFinder {
