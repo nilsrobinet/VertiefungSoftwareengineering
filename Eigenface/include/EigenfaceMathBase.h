@@ -92,31 +92,26 @@ namespace Eigenface {
          *
          * @returns the product of two matricies
          */
-        template <long unsigned int x1, long unsigned int y1,
-                  long unsigned int x2, long unsigned int y2>
-        static Matrix<x1,y2> matMul(const Matrix<x1,y1>& mat1, const Matrix<x2,y2>& mat2) {
-            static_assert(x1 == y2);
-            Matrix<x1,y2> res = {0};
-            for (auto row = 0; row < x1; row++) {
-                for (auto col = 0; col < y2; col++){
-                
-                    for (auto i = 0; i < x2; i++) {
-                        res[row][col] += mat1[col][i] * mat2[i][row];
+        template <long unsigned int x, long unsigned int y,long unsigned int z>
+        static Matrix<x,z> matMul(const Matrix<x,y>& mat1, const Matrix<y,z>& mat2) {
+            Matrix<x,z> result = {0};
+            for (uint16_t i = 0; i < x; ++i) {
+                for (uint16_t k = 0; k < y; ++k) {
+                    float temp = mat1[i][k];
+                    for (uint16_t j = 0; j < z; ++j) {
+                        result[i][j] += temp * mat2[k][j];
                     }
                 }
             }
-            return res;
+            return result;
         }
+
         // Function to multiply a matrix by a vector
         template<long unsigned int x, long unsigned int y>
-        static Vector<x> multiplyMatrixVector(const Matrix<x, y>& matrix, const Vector<y>& vec) {
-            Vector<x> result = {0};
-            for (uint16_t i = 0; i < x; ++i) {
-                for (uint16_t j = 0; j < y; ++j) {
-                    result[i] += matrix[i][j] * vec[j];
-                }
-            }
-            return result;
+        static Vector<x> matMul(const Matrix<x, y>& matrix, const Vector<y>& vec) {
+            const auto& vecAsMat = reinterpret_cast<const Matrix<y, 1>&>(vec);
+            Matrix<x,1> result = matMul(matrix, vecAsMat);
+            return *reinterpret_cast<Vector<x>*>(&result);
         }
     
     };

@@ -6,22 +6,55 @@ namespace Eigenface {
         /**
          * Function to orthogonalize a set of vectors using Gram-Schmidt process
          */
-        template<long unsigned int n, long unsigned int m>
-        static void gramSchmidtOrthogonalization(Matrix<n, m>& vectors) {
-            for (uint16_t i = 0; i < m; ++i) {
-                for (uint16_t j = 0; j < i; ++j) {
-                    float dotProduct = 0.0f;
-                    for (uint16_t k = 0; k < n; ++k) {
-                        dotProduct += vectors[k][i] * vectors[k][j];
+        template<long unsigned int n, long unsigned int k>
+        static Matrix<n,k> gramSchmidtOrthogonalization(Matrix<n, k>& V) {
+        
+            Matrix<n,k> U = {0.0f};
+        
+            // Compute the first column of U
+            double norm_v1 = 0.0;
+            for (int row = 0; row < n; ++row) {
+                norm_v1 += V[row][0] * V[row][0];
+            }
+            norm_v1 = sqrt(norm_v1);
+        
+            for (int row = 0; row < n; ++row) {
+                U[row][0] = V[row][0] / norm_v1;
+            }
+        
+            // Compute the rest of the columns of U
+            for (int i = 1; i < k; ++i) {
+                // Start with vi
+                for (int row = 0; row < n; ++row) {
+                    U[row][i] = V[row][i];
+                }
+        
+                // Subtract projections on previous orthonormal vectors
+                for (int j = 0; j < i; ++j) {
+                    double dot_product = 0.0;
+                    for (int row = 0; row < n; ++row) {
+                        dot_product += U[row][j] * U[row][i];
                     }
-                    for (uint16_t k = 0; k < n; ++k) {
-                        vectors[k][i] -= dotProduct * vectors[k][j];
+                    for (int row = 0; row < n; ++row) {
+                        U[row][i] -= dot_product * U[row][j];
                     }
                 }
-                Math::normalize(vectors[i]);
-            }
-        }
         
+                // Normalize vi
+                double norm_vi = 0.0;
+                for (int row = 0; row < n; ++row) {
+                    norm_vi += U[row][i] * U[row][i];
+                }
+                norm_vi = sqrt(norm_vi);
+        
+                for (int row = 0; row < n; ++row) {
+                    U[row][i] /= norm_vi;
+                }
+            }
+        
+            return U;
+        }
+
         /**
          * Function to find the M most significant eigenvalues and eigenvectors using Orthogonal Iteration
          */
@@ -36,14 +69,14 @@ namespace Eigenface {
                 // Multiply the matrix by the current set of vectors
                 Matrix<n, m> newVectors = {0};
                 for (uint16_t i = 0; i < m; ++i) {
-                    auto columnVector = Math::multiplyMatrixVector(matrix, vectors[i]);
+                    auto columnVector = Math::matMul(matrix, vectors[i]);
                     for (uint16_t j = 0; j < n; ++j) {
                         newVectors[j][i] = columnVector[j];
                     }
                 }
         
                 // Orthogonalize and normalize the resulting vectors
-                gramSchmidtOrthogonalization(newVectors);
+                newVectors = gramSchmidtOrthogonalization(newVectors);
         
                 // Check for convergence
                 float diff = 0.0f;
@@ -62,7 +95,7 @@ namespace Eigenface {
             // Compute the Rayleigh quotient for the eigenvalues
             std::array<float, m> eigenvalues = {0};
             for (uint16_t i = 0; i < m; ++i) {
-                auto Av = Math::multiplyMatrixVector(matrix, vectors[i]);
+                auto Av = Math::matMul(matrix, vectors[i]);
                 for (uint16_t j = 0; j < n; ++j) {
                     eigenvalues[i] += vectors[j][i] * Av[j];
                 }

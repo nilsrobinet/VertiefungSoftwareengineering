@@ -11,13 +11,13 @@ else
 fi
 
 
-if [ $BUILD_TYPE = "Release" ]; then
+if [ $BUILD_TYPE = "Release" ] || [ $BUILD_TYPE = "Debug" ]; then
     echo "************************************"
     echo "Building with option $BUILD_TYPE"
     echo "************************************"
     mkdir -p "$BUILD_TYPE"
     cd $BUILD_TYPE
-    cmake "$ROOT_DIR/Eigenface/."
+    cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE "$ROOT_DIR/Eigenface/."
     make
 else
     echo "************************************"
