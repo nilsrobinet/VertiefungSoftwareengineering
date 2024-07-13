@@ -30,12 +30,12 @@ namespace Eigenface {
         static std::array<float,dim> averageVector(const VectorList<dim,numVectors>& vectorList ) {
             std::array<float, dim> averageVector;
             averageVector.fill(0);
-            for (int vecIdx = 0; vecIdx < numVectors; vecIdx++) {
-                for (int elemIdx = 0; elemIdx < (dim); elemIdx++) {
+            for (auto vecIdx = 0U; vecIdx < numVectors; vecIdx++) {
+                for (auto elemIdx = 0U; elemIdx < (dim); elemIdx++) {
                     averageVector[elemIdx] += vectorList[vecIdx][elemIdx];
                 }
             }
-            for (int elemIdx = 0; elemIdx < (dim); elemIdx++) {
+            for (auto elemIdx = 0U; elemIdx < (dim); elemIdx++) {
                 averageVector[elemIdx] /= numVectors;
             }
             return averageVector;
@@ -62,11 +62,11 @@ namespace Eigenface {
         template<long unsigned int n>
         static void normalize(Vector<n>& vec) {
             float norm = 0.0f;
-            for (uint16_t i = 0; i < n; ++i) {
+            for (auto i = 0U; i < n; ++i) {
                 norm += vec[i] * vec[i];
             }
             norm = std::sqrt(norm);
-            for (uint16_t i = 0; i < n; ++i) {
+            for (auto i = 0U; i < n; ++i) {
                 vec[i] /= norm;
             }
         }
@@ -79,8 +79,8 @@ namespace Eigenface {
         template <long unsigned int x, long unsigned int y>
         static Matrix<y,x> transpose(const Matrix<x,y>& mat) {
             Matrix<y,x> mat_T = {0};
-            for (auto rowIndex = 0; rowIndex < x; rowIndex++) {
-                for (auto columnIndex = 0; columnIndex < y; columnIndex++) {
+            for (auto rowIndex = 0U; rowIndex < x; rowIndex++) {
+                for (auto columnIndex = 0U; columnIndex < y; columnIndex++) {
                     mat_T[columnIndex][rowIndex] = mat[rowIndex][columnIndex];
                 }
             }
@@ -95,10 +95,10 @@ namespace Eigenface {
         template <long unsigned int x, long unsigned int y,long unsigned int z>
         static Matrix<x,z> matMul(const Matrix<x,y>& mat1, const Matrix<y,z>& mat2) {
             Matrix<x,z> result = {0};
-            for (uint16_t i = 0; i < x; ++i) {
-                for (uint16_t k = 0; k < y; ++k) {
+            for (auto i = 0U; i < x; ++i) {
+                for (auto k = 0U; k < y; ++k) {
                     float temp = mat1[i][k];
-                    for (uint16_t j = 0; j < z; ++j) {
+                    for (auto j = 0U; j < z; ++j) {
                         result[i][j] += temp * mat2[k][j];
                     }
                 }
@@ -109,9 +109,14 @@ namespace Eigenface {
         // Function to multiply a matrix by a vector
         template<long unsigned int x, long unsigned int y>
         static Vector<x> matMul(const Matrix<x, y>& matrix, const Vector<y>& vec) {
-            const auto& vecAsMat = reinterpret_cast<const Matrix<y, 1>&>(vec);
-            Matrix<x,1> result = matMul(matrix, vecAsMat);
-            return *reinterpret_cast<Vector<x>*>(&result);
+            Vector<x> result;
+            for (uint16_t i = 0; i < x; ++i) {
+                result[i] = 0;
+                for (uint16_t j = 0; j < y; ++j) {
+                    result[i] += matrix[i][j] * vec[j];
+                }
+            }
+            return result;
         }
     
     };

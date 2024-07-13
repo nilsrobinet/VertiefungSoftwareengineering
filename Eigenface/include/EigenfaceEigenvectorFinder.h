@@ -13,41 +13,41 @@ namespace Eigenface {
         
             // Compute the first column of U
             double norm_v1 = 0.0;
-            for (int row = 0; row < n; ++row) {
+            for (auto row = 0U; row < n; ++row) {
                 norm_v1 += V[row][0] * V[row][0];
             }
             norm_v1 = sqrt(norm_v1);
         
-            for (int row = 0; row < n; ++row) {
+            for (auto row = 0U; row < n; ++row) {
                 U[row][0] = V[row][0] / norm_v1;
             }
         
             // Compute the rest of the columns of U
-            for (int i = 1; i < k; ++i) {
+            for (auto i = 1U; i < k; ++i) {
                 // Start with vi
-                for (int row = 0; row < n; ++row) {
+                for (auto row = 0U; row < n; ++row) {
                     U[row][i] = V[row][i];
                 }
         
                 // Subtract projections on previous orthonormal vectors
-                for (int j = 0; j < i; ++j) {
+                for (auto j = 0U; j < i; ++j) {
                     double dot_product = 0.0;
-                    for (int row = 0; row < n; ++row) {
+                    for (auto row = 0U; row < n; ++row) {
                         dot_product += U[row][j] * U[row][i];
                     }
-                    for (int row = 0; row < n; ++row) {
+                    for (auto row = 0U; row < n; ++row) {
                         U[row][i] -= dot_product * U[row][j];
                     }
                 }
         
                 // Normalize vi
                 double norm_vi = 0.0;
-                for (int row = 0; row < n; ++row) {
+                for (auto row = 0U; row < n; ++row) {
                     norm_vi += U[row][i] * U[row][i];
                 }
                 norm_vi = sqrt(norm_vi);
         
-                for (int row = 0; row < n; ++row) {
+                for (auto row = 0U; row < n; ++row) {
                     U[row][i] /= norm_vi;
                 }
             }

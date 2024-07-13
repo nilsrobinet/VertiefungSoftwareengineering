@@ -7,17 +7,6 @@ project(my_project)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Set the compiler options based on the build type
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    message(STATUS "Configuring for Debug build")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    message(STATUS "Configuring for Release build")
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-else()
-    message(WARNING "Unknown build type: ${CMAKE_BUILD_TYPE}")
-endif()
-
 include(FetchContent)
 FetchContent_Declare(
   googletest
