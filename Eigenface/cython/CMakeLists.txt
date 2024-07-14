@@ -8,6 +8,7 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
 else()
     message(WARNING "Unknown build type: ${CMAKE_BUILD_TYPE}")
 endif()
+set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
@@ -25,8 +26,13 @@ include_directories(
     /usr/include/python3.12/
     ../include
 )
-add_executable(
-    eigenface_python
+#add_executable(
+#    eigenface_python
+#    ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
+#)
+add_library(
+    Eigenface
+    SHARED
     ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
 )
-add_dependencies(eigenface_python Eigenface_cython)
+add_dependencies(Eigenface Eigenface_cython)
