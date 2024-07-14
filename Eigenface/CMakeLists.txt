@@ -16,6 +16,7 @@ endif()
 
 add_subdirectory(src)
 add_subdirectory(test)
+add_subdirectory(cython)
 
 set(
       ARCHIVE_OUTPUT_DIRECTORY "build"

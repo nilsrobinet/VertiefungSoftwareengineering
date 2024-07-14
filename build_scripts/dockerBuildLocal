@@ -1,0 +1,7 @@
+#!/bin/bash
+PROJECT_ROOT="$(dirname "$0")/.."
+
+docker build $PROJECT_ROOT --tag eigenface_build_docker
+
+
+

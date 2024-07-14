@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <cmath>
+#include <array>
 
 template<uint16_t dim>
 using Vector = std::array<float,dim>;
