@@ -1,6 +1,7 @@
 # General
 *.swp
 build/**
+bin/**
 *.log
 *.qcow2
 
@@ -12,4 +13,4 @@ Testing
 
 #python
 .venv
-
+__pycache__

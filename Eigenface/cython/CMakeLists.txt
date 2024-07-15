@@ -36,3 +36,7 @@ add_library(
     ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
 )
 add_dependencies(Eigenface Eigenface_cython)
+
+install( TARGETS Eigenface
+        DESTINATION ${PROJECT_SOURCE_DIR}/../bin
+)

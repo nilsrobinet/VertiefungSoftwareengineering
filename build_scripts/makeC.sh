@@ -19,6 +19,7 @@ if [ $BUILD_TYPE = "Release" ] || [ $BUILD_TYPE = "Debug" ]; then
     cd $BUILD_TYPE
     cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE "$ROOT_DIR/Eigenface/."
     make
+    make install
 else
     echo "************************************"
     echo "Build type $BUILD_TYPE not supported"
