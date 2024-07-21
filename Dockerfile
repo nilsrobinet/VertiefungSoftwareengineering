@@ -7,7 +7,7 @@ RUN apt install -y texlive\
     texlive-lang-german\
     texlive-latex-extra\
     texlive-science
-RUN apt install -y cmake make gcc g++
+RUN apt install -y cmake make gcc g++ doxygen graphviz
 RUN apt install -y python3 python3-pip python3-venv python3-dev
 
 ENV VIRTUAL_ENV=/opt/venv

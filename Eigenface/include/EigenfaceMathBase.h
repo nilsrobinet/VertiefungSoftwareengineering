@@ -16,16 +16,22 @@ template<uint16_t x, uint16_t y, uint16_t num>
 using MatrixList = std::array<Matrix<x,y>, num>;
 
 namespace Eigenface {
+    /**
+    * @brief this module shall provide some simple helper functions for working with matricies and vectors
+    */
     class Math {
     private:
         // helper functions
         static constexpr int max( int a, int b) { if (a > b) return a; else return b;};
-    
+
     public:
         /**
-         * Calculate the average vector of a list of vectors
+         * @brief Calculate the average vector of a list of vectors
+         *
+         * @tparam dim dimesion of the vectors
+         * @tparam numVectors number of vectors in the input
          * @param vectorList list of vectors of which the average shall be provided
-         * 
+         *
          * @returns average vector
          */
         template <long unsigned int dim, long unsigned int numVectors>
@@ -42,23 +48,11 @@ namespace Eigenface {
             }
             return averageVector;
         }
-    
-        /**
-         * TODO: move to eigenface specific class
-         * Normalize a list of vectors by subtracting another vector
-         */
-        //template <int dim, int numVectors>
-        //static void normalize(VectorList<dim,numVectors>& vectorList, const Vector<dim>& normVec) {
-        //     for (auto vectorIndex = 0; vectorIndex < numVectors; vectorIndex++) {
-        //        for (auto elemIndex = 0; elemIndex < dim; elemIndex++) {
-        //            vectorList[vectorIndex][elemIndex] = vectorList[vectorIndex][elemIndex] - normVec[elemIndex];
-        //        }
-        //     }
-        //}
-        
+
         /*
-         * Function to normalize a vector
-         * 
+         * @brief Function to normalize a vector
+         *
+         * @tparam dim dimesion of the vectors
          * @param Reference to vector to be normalized
          */
         template<long unsigned int n>
@@ -72,10 +66,13 @@ namespace Eigenface {
                 vec[i] /= norm;
             }
         }
-    
+
         /**
-         * Transpose a matrix
-         * 
+         * @brief Transpose a matrix
+         *
+         * @tparam x dimension of the matrix
+         * @tparam y dimension of the matrix
+         *
          * @returns a new matirx containing the transposed matrix
          */
         template <long unsigned int x, long unsigned int y>
@@ -88,9 +85,15 @@ namespace Eigenface {
             }
             return mat_T;
         }
-    
+
         /**
-         * Multiply two matricies
+         * @brief Multiply two matricies
+         *
+         * @tparam x X-Dimension of the first input matrix
+         * @tparam y Y-Dimension of the firs input matrix and X-Dimension of the second input matrix
+         * @tparam z Y-Dimension of the second input matrix
+         * @param mat1 first input matrix
+         * @param mat2 second input matrix
          *
          * @returns the product of two matricies
          */
@@ -108,7 +111,16 @@ namespace Eigenface {
             return result;
         }
 
-        // Function to multiply a matrix by a vector
+        /**
+         * @brief multiply a matrix by a vector
+         *
+         * @tparam x X-Dimension of the matrix
+         * @tparam y Y-Dimension of the matrix and dimension of the vector
+         * @param matrix matrix input
+         * @param vec vector input
+         *
+         * @returns the vector that is the result of the multiplication
+         */
         template<long unsigned int x, long unsigned int y>
         static Vector<x> matMul(const Matrix<x, y>& matrix, const Vector<y>& vec) {
             Vector<x> result;
@@ -120,6 +132,6 @@ namespace Eigenface {
             }
             return result;
         }
-    
+
     };
 }

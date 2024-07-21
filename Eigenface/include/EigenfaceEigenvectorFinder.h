@@ -3,10 +3,19 @@
 
 
 namespace Eigenface {
+    /**
+    * @brief A class bundeling the functions used to find the eigenvectors of a matrix
+    */
     class EigenvectorFinder {
-    public: 
+    private: 
         /**
-         * Function to orthogonalize a set of vectors using Gram-Schmidt process
+         * @brief Function to orthogonalize a set of vectors using Gram-Schmidt process
+         * 
+         * @tparam n dimension of the vectors
+         * @tparam k number of vectors
+         * @param V vectors that shall be orthogonalized
+         *
+         * @returns a matrix of which the columns are orthogonal vectors
          */
         template<long unsigned int n, long unsigned int k>
         static Matrix<n,k> gramSchmidtOrthogonalization(Matrix<n, k>& V) {
@@ -58,7 +67,15 @@ namespace Eigenface {
         }
 
         /**
-         * Function to find the M most significant eigenvalues and eigenvectors using Orthogonal Iteration
+         * @brief Function to find the M most significant eigenvalues and eigenvectors using Orthogonal Iteration
+         * 
+         * @tparam n dimension of the matrix
+         * @tparam m dimension of the matrix
+         * @param matrix of which the eigenvectors and eigenvalues shall be found
+         * @param maxIterations maximum number of iterations befor aborting
+         * @param tolerance under which convergence is achieved
+         *
+         * @returns a pair of eigenvalues and eigenvectors
          */
         template<long unsigned int n, long unsigned int m>
         static std::pair<std::array<float, m>, Matrix<n, m>> orthogonalIteration(const Matrix<n, n>& matrix, uint16_t maxIterations = 1000, float tolerance = 1e-6) {
@@ -105,11 +122,20 @@ namespace Eigenface {
         
             return {eigenvalues, vectors};
         }
-        /*
-         * Function to find eigenvalues and eigenvectors
+
+    public:
+        /**
+         * @brief Function to find eigenvalues and eigenvectors
+         * 
+         * @tparam x dimension of the matrix
+         * @tparam y dimension of the matrix
+         * @tparam m number of eigenvectors requested to be found
+         * @param matrix for which the eigenvectors and eigenvalues shall be found
+         *
+         * @returns a pair of eigenvalues and eigenvectors
          */
         template<uint64_t x, uint64_t y, uint64_t m>
-        static std::pair<std::array<float, m>, Matrix<x, m>> find(const Matrix<x, y>& matrix, const uint64_t M=m) {
+        static std::pair<std::array<float, m>, Matrix<x, m>> find(const Matrix<x, y>& matrix) {
             // Ensure the matrix is square
             static_assert(x == y, "Matrix must be square to calculate eigenvalues and eigenvectors");
             static_assert(m <= x, "Number of requested eigenvectors must be less than or equal to matrix size");

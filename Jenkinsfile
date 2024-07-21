@@ -18,6 +18,7 @@ pipeline {
                 echo 'Testing..'
                 ctest arguments: '''
                 --test-dir build/Release/test/
+                --output-junit ctest.junit.xml
                 ''', installation: 'InSearchPath'
             }
         }

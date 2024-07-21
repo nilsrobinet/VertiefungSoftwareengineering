@@ -10,6 +10,7 @@
 \usepackage{multicol}
 \usepackage{xcolor}
 \usepackage{graphicx}
+\usepackage{pdfpages}
 \usepackage[margin=10pt,font=small,labelfont=bf]{caption}
 \sisetup{
 	locale = DE ,
@@ -111,4 +112,6 @@
 \include{chapters/tools}
 \include{chapters/umgebung}
 \include{chapters/developmentStrat.tex}
+\appendix
+    \includepdf[pages=-]{../../build/docu/latex/refman.pdf}
 \end{document}
