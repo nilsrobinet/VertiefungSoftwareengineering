@@ -28,13 +28,20 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                expression {
+                    env.BRANCH_NAME == 'main'
+                }
+            }
             steps {
                 echo 'Deploying....'
+                sh './build_scripts/deploy.sh'
             }
         }
     }
     post {
-        changed {
+        always {
+            junit 'build/test/ctest.junit.xml'
             archiveArtifacts artifacts: 'build/docu/**/*.pdf', onlyIfSuccessful: true
         }
     }

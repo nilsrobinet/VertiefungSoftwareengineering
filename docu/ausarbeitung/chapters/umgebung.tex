@@ -39,13 +39,39 @@ Zur erstellung und installation wurden folgende Schritte durch geführt:
     \lstinline[language=sh]!sudo usermod -aG docker jenkins!\\
     \item Nach der installation kann über den Webrowser auf dem Host Beriebsystem unter der Addresse http://localhost:8090 auf die jenkins installation zu gegriffen werden. Im initialen Setup-dialog muss ausgewählt werden ob dieStandar-Plugins installiert werden sollen, hier sollte mit ja geantwortet werden, und ein Admin Benutzer angelegt werden. Danach landet man im Haupmenu der Jenkins installation.
 
-Zusätzlich wird noch das Plugin "Docker Pipeline" benötigt, das es ermöglicht in docker images zu bauen.
+Zusätzlich wird noch das Plugin \glqq Docker Pipeline\grqq{} benötigt, das es ermöglicht in docker images zu bauen.
 \end{enumerate}
 
 \subsection{Projekt einrichtung}
 
-Unter dem Punkt "new job" wird ein neuer Multibranch Pipeline Job angelegt und Konfiguriert. Als Branch Source wird das github Repo dieses Projekts angegeben. Damit jenkins auf das Projekt zu greifen kann müsen noch Github credentials eingrtragen werden. 
+Unter dem Punkt \glqq new job\grqq{} wird ein neuer Multibranch Pipeline Job angelegt und Konfiguriert. Als Branch Source wird das github Repo dieses Projekts angegeben. Damit jenkins auf das Projekt zu greifen kann müsen noch Github credentials eingrtragen werden.
 
 Damit Jenkins Änderungen zeitnah erkennt wir ein periodischer Trigger mit einem Intervall von einer Minute eingestellt. Danach ist das Projekt fertig konfiguriert und kann benutzt werden.
 
 Die Build und Deployment stages werden durch das im Repositroy eingecheckte Jenkinsfile konfgiuriert. Der build findet in einem Docker-Container statt der durch ein Dockerfile, das ebenfalls eingecheckt ist, erstellt wird. Das docker image wird durch Jenkins gemanaged, Jenkins kümmert sich auch darum das Dockerimage beiÄnderungen am Dockerfile neu zu generieren.
+
+\subsection{Pipeline Konfiguration}
+
+Die Build-/Deployment-Pipeline wird durch die Datei Jenkisfile, die im Root-Verzeichniss des Projekts liegt, konfigiert.
+Jenkins wertet diese Datei automatisch aus und führt die darin beschriebenen Schritte durch. Die Datei ist hirarchich aufgebaut. In der obersten Ebene wird durch den Key \glqq pipeline\grqq{} festgelegt, das eine Pipeline beschrieben werden soll. in der Ebene darunter wird unter dem Key \glqq  agent\grqq{} festgelget, wo das Projekt gebaut werden soll und welche voraussetzungen die Build-Agents mit bringen müssen. Da keine anderen Build agents angelegt wurden, wird das Projekt direkt auf dem Jenkins server gebaut, daher wird hier nur Festgelegt, dass das Projekt in einem Docker Container gebaut werden soll. Der Docker Container wird durch das Dockerfile, welches ebenfalls im Root-Verzeichniss des Projekts eingecheckt ist erstellt. Da Jenkins nur das Dockerfile bekannt gemacht wurde, übernimmt Jenkins das Managemnt der Images, das Bedeutet unter anderem, dass Jenkins automatisch detektiert ob sich das Dockerfile geändert hat und ob ein neues Image gebaut werden muss.
+
+Unter dem Key   \glqq   stages\grqq{} werden die Einzelschritte der Pipeline fest gelegt. In diesem Fall sind das vier schritte: 
+\begin{enumerate}
+    \item{Build} In dieser Stage werden die scripte aufgerufen, die die Komponenten kompilieren die kompiliert werden sollen. Im anschlus wird alles was ein ausgeliefert werden soll installiert
+    \item{Test} In dieser Stage werden tests mit den Tools ctest (C Unit tests) und pytest (Python tests) ausgeführt.
+    \item{Docu} In dieser Stage wird die Dokumentation generiert.
+    \item{Deploy} In dieser Stage wird das fertig kompilierte und installierte Programm ausgeliefert und gestartet. 
+\end{enumerate}
+
+Der Key \glqq  post\grqq{} beschreibt was nach dem Build und Deploy geschehen soll, dazu gehört das Speichern von artifakten, die behalten werden sollen und das auswerden von Testergebnissen.
+
+\lstinputlisting[language=json]{../../Jenkinsfile}
+
+\subsection{Buildumgebung}
+Die Buildumgebung wird in einem Docker Container bereitgestellt. Das Docker Image wird durch ein Dockerfile erzeugt:
+
+\lstinputlisting[language=bash]{../../Dockerfile}
+
+Das Image Basiert auf einem Ubuntu Image in das zusätzlich alle Tools installiert werden die im Build prozess benötigt werden.
+
+Die scripte die zum Bauen verwendet werden liegen im Verzeichnis \glqq build\_scripts\grqq{}. In diesem Verzeichnis liegen auch Scripte die das lokale Arbeiten vereinfachen sollen: Unter Anderem liegen hier scripte die das Bauen des Dockerimages automatisieren und ein Skipt das den Container interaktiv startet und das Repository mountet.
