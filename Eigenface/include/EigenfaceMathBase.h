@@ -3,10 +3,10 @@
 #include <cmath>
 #include <array>
 
-template<uint16_t dim>
+template<unsigned long int dim>
 using Vector = std::array<float,dim>;
 
-template<uint16_t dim, uint16_t numVectors>
+template<unsigned long int dim, uint16_t numVectors>
 using VectorList = std::array<Vector<dim>, numVectors>;
 
 template<uint16_t x, uint16_t y>

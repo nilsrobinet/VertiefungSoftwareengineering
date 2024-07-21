@@ -18,7 +18,7 @@ if [ $BUILD_TYPE = "Release" ] || [ $BUILD_TYPE = "Debug" ]; then
     mkdir -p "$BUILD_TYPE"
     cd $BUILD_TYPE
     cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE "$ROOT_DIR/Eigenface/."
-    make
+    #make
     make install
 else
     echo "************************************"

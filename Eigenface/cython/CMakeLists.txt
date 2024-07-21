@@ -12,7 +12,7 @@ set(CMAKE_SHARED_LIBRARY_PREFIX "")
 
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
-    COMMAND cython ${PROJECT_SOURCE_DIR}/cython/Eigenface.pyx --cplus --3str -o${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
+    COMMAND cython ${PROJECT_SOURCE_DIR}/cython/Eigenface.pyx --cplus --3str -o ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
     DEPENDS Eigenface.pyx
     COMMENT "Genreating Eigenface.cpp from Eigenface.pyx"
     VERBATIM
@@ -21,19 +21,30 @@ add_custom_target(
     Eigenface_cython ALL
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
 )
+# Find Python executable
+find_package(PythonInterp REQUIRED)
+
+# Get the NumPy include directory
+execute_process(
+    COMMAND ${PYTHON_EXECUTABLE} -c "import numpy; print(numpy.get_include())"
+    OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
 include_directories(
     /usr/include/python3.12/
     ../include
+    ${NUMPY_INCLUDE_DIR}
 )
-#add_executable(
-#    eigenface_python
-#    ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
-#)
+
+add_definitions(-DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION)
+
 add_library(
     Eigenface
     SHARED
     ${CMAKE_CURRENT_BINARY_DIR}/Eigenface.cpp
+    ${PROJECT_SOURCE_DIR}/src/EigenfaceMain.cpp
+    
 )
 add_dependencies(Eigenface Eigenface_cython)
 
