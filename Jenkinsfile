@@ -21,6 +21,7 @@ pipeline {
                 --output-junit ctest.junit.xml
                 ''', installation: 'InSearchPath'
                 sh 'pylint --output-format=junit WebappDemo/src/ > build/Release/test/pylint.junit.xml'
+                sh 'pytest --junit-xml=build/Release/test/pytest.junit.xml'
             }
         }
         stage('Docu') {
@@ -45,6 +46,7 @@ pipeline {
         always {
             junit 'build/Release/test/ctest.junit.xml'
             junit 'build/Release/test/pylint.junit.xml'
+            junit 'build/Release/test/pytest.junit.xml'
             archiveArtifacts artifacts: 'build/docu/**/*.pdf', onlyIfSuccessful: true
         }
     }
