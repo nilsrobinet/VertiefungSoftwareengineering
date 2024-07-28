@@ -1,5 +1,4 @@
 # General
-*.swp
 build/**
 bin/**
 *.log
@@ -14,3 +13,7 @@ Testing
 #python
 .venv
 __pycache__
+
+# Editor
+*.swp
+.zed
