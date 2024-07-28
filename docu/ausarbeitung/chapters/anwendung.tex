@@ -1,0 +1,11 @@
+\chapter{Anwnedung}
+
+In dem, in den vorangegangenen Kapiteln beschriebenen Entwicklungs flow soll eine python-kompatible Bibliothek zur Verdwendung des Eigengesichtsalogrithmus entwickelt werden. Um deren Effektivität demonstrieren zu können soll eine Demoanwendung in Form einer Webseite, die im Backend die Bibliothek verwendet und dem Nutzer die möglichkeit gibt die Funktionaliteten der Bibliothek aus zu probieren, bereit gestellt werden.
+
+\section{Eigengesicht-Bibliothek}
+
+Der Eigengesicht algorithmus soll aus Performance gründen in C++ implementiert werden (Für die Dokumnetation der C++ implementierung siehe \ref{TODO}). Um das Interfacing mit Python zu vereinfachen soll mit Hilfe der Programmiersprace Cython \ref{TODO} eine Schnittstelle implementiert werden, die die aus Python aufrufbaren Klassen und Funktionen bereit stellt.
+
+Die C++ Implementation soll über Unit tests, die von der CI/CD Pipeline automatisiert aufgerufen werden, abgesichert werden. Hierzu soll zu jeder Funkion ein Test vorliegen. Die Unit tests sollen im Google Test Framework unmgestzt werden. Für die Auswertung soll ein junit kompatibles XML generiert werden.
+
+Das Cython interface soll mit Hilfe des pytest Frameworks getestet werden. Hier sollen nur high-level tests implementiert werden, die nicht unbedingt die Funktionalität der C++ Funktionen testen, sondern ihren Fokus auf die Absicherung der Schnittstellen legen. Auch die Python Tests sollen ein junit kompatibles XML generieren.
