@@ -1,5 +1,5 @@
 """This module contains the class that implements the method dispatcher for the webapp"""
-import cherrypy
+import cherrypy # pylint: disable=E0401
 
 @cherrypy.expose
 class EigenfaceDispatcher:

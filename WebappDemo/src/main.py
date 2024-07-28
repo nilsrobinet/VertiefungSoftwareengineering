@@ -2,7 +2,7 @@
 for using the Eigenface algorithm"""
 import os
 import sys
-import cherrypy
+import cherrypy # pylint: disable=E0401
 
 from .eigenfaceDispatcher import EigenfaceDispatcher
 
