@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 
-RUN apt update && apt upgrade
+RUN apt update -y && apt upgrade -y
 RUN apt install -y curl\
     vim
 RUN apt install -y texlive\
