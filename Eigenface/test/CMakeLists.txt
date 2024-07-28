@@ -1,4 +1,4 @@
-include(GoogleTest)
+#include(GoogleTest)
 
 cmake_minimum_required(VERSION 3.14)
 project(my_project)
@@ -14,13 +14,15 @@ FetchContent_Declare(
 )
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+# Set options before fetching GoogleTest to prevent installation
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF)
+set(INSTALL_GMOCK OFF)
+set(BUILD_GMOCK OFF)
+set(BUILD_GTEST OFF)
+
 FetchContent_MakeAvailable(googletest)
-
 enable_testing()
-
-# TODO: move to testDirectories
-# TODO: dedicated tests for different classes
-
 
 add_executable(
     test_Eigenface 
