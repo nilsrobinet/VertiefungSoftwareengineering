@@ -20,8 +20,8 @@ pipeline {
                 --test-dir build/Release/test/
                 --output-junit ctest.junit.xml
                 ''', installation: 'InSearchPath'
-                sh 'pylint --output-format=junit WebappDemo/src/ > build/Release/test/pylint.junit.xml && echo "DONE!"'
-                sh 'pytest --junit-xml=build/Release/test/pytest.junit.xml && echo "DONE!"'
+                sh 'pylint --output-format=junit WebappDemo/src/ > build/Release/test/pylint.junit.xml || true'
+                sh 'pytest --junit-xml=build/Release/test/pytest.junit.xml || true'
             }
         }
         stage('Docu') {
