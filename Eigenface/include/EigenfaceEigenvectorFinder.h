@@ -8,6 +8,7 @@ namespace Eigenface {
     */
     class EigenvectorFinder {
     private: 
+    public:
         /**
          * @brief Function to orthogonalize a set of vectors using Gram-Schmidt process
          * 
@@ -123,7 +124,6 @@ namespace Eigenface {
             return {eigenvalues, vectors};
         }
 
-    public:
         /**
          * @brief Function to find eigenvalues and eigenvectors
          * 
