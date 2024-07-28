@@ -16,7 +16,10 @@ cdef class PyEigenface:
         cdef float* faces_ptr = <float*> faces.data
         cdef np.ndarray[np.float32_t, ndim=2] avg_face = np.empty((256, 256), dtype=np.float32)
         cdef float* avg_face_ptr = <float*> avg_face.data
-        
         self.c_eigenface.getAverageFace(faces_ptr, avg_face_ptr)
-        
         return avg_face
+
+
+    def getDeviationFromAverageFace(self, np.ndarray[np.float32_t, ndim=3] faces):
+        cdef float* faces_ptr = <float*> faces.data
+        self.c_eigenface.getDeviationFromAverageFace(faces_ptr)
