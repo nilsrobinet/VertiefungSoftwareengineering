@@ -20,7 +20,7 @@ pipeline {
                 --test-dir build/Release/test/
                 --output-junit ctest.junit.xml
                 ''', installation: 'InSearchPath'
-                sh 'find --name ctest.junit.xml'
+                sh 'find -name ctest.junit.xml'
             }
         }
         stage('Docu') {
