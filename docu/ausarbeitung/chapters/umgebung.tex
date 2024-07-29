@@ -1,10 +1,10 @@
 \chapter{Entwicklungsumgebung}
 
-Für das Projekt sollte eine \acf{CI/CD} Pipline angelegt werden. Zu diesem Zweck wird ein Build Server in einer \acf{VM} gestartet.
+Für das Projekt sollte eine \acf{CI/CD} Pipline angelegt werden. Zu diesem Zweck wird ein Build Server in einer \acf{VM} gestartet. Der Code soll in einer in einer Versionsverwaltungs eingecheckt werden, um Änderungen nachvollziehbar zu machen und Zusammenarbeit am Code zu vereinfachen.  
 
 \section{Werkzeuge und Anwendungen}
 
-Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in chap TODO). Um das remote repository zu managen wird auf Github gesetzt. Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server läuft in einer \ac{VM}. Als Virtualisierungslösung wurde QEMU/KVM ausgeählt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
+Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in \autoref{chap:git-strat}). Um das remote repository zu managen wird Github als Frontend eingesetzt. Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server läuft in einer \ac{VM}. Als Virtualisierungslösung wurde QEMU/KVM ausgeählt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
 
 \section{Build-Server Setup}
 
@@ -52,18 +52,22 @@ Die Build und Deployment stages werden durch das im Repositroy eingecheckte Jenk
 
 \subsection{Pipeline Konfiguration}
 
-Die Build-/Deployment-Pipeline wird durch die Datei Jenkisfile, die im Root-Verzeichniss des Projekts liegt, konfigiert.
-Jenkins wertet diese Datei automatisch aus und führt die darin beschriebenen Schritte durch. Die Datei ist hirarchich aufgebaut. In der obersten Ebene wird durch den Key \glqq pipeline\grqq{} festgelegt, das eine Pipeline beschrieben werden soll. in der Ebene darunter wird unter dem Key \glqq  agent\grqq{} festgelget, wo das Projekt gebaut werden soll und welche voraussetzungen die Build-Agents mit bringen müssen. Da keine anderen Build agents angelegt wurden, wird das Projekt direkt auf dem Jenkins server gebaut, daher wird hier nur Festgelegt, dass das Projekt in einem Docker Container gebaut werden soll. Der Docker Container wird durch das Dockerfile, welches ebenfalls im Root-Verzeichniss des Projekts eingecheckt ist erstellt. Da Jenkins nur das Dockerfile bekannt gemacht wurde, übernimmt Jenkins das Managemnt der Images, das Bedeutet unter anderem, dass Jenkins automatisch detektiert ob sich das Dockerfile geändert hat und ob ein neues Image gebaut werden muss.
+Die Build-/Deployment-Pipeline wird durch die Datei Jenkisfile, die im Root-Verzeichniss des Projekts liegt, konfigiert. Für jeden Branch kann dabei eine andere Konfiguration in der zugehörigen Jenkisfile Datei angelegt werden, so können Entwickler auf ihrem Branch ungestörrt neue Features, die Änderungen and der CI/CD-Pipeline nach sich ziehen, hoch bringen ohne andere Branches wie den develop oder main Branch zu beeinflussen.
+Im Unterordner \lstinline{build_scripts} liegen Script-Dateien welche in den einzelnen Schritten der Pipeline aufgerufen werden. Mit Hilfe dieser Scripte werden dann die eigentlichen Builds und Deployments durchgeführt.
 
-Unter dem Key   \glqq   stages\grqq{} werden die Einzelschritte der Pipeline fest gelegt. In diesem Fall sind das vier schritte: 
+Jenkins wertet die Jenkinsfile Datei automatisch aus und führt die darin beschriebenen Schritte durch. Die Datei ist hirarchich aufgebaut. In der obersten Ebene wird durch den Key \glqq pipeline\grqq{} festgelegt, das eine Pipeline beschrieben werden soll. in der Ebene darunter wird unter dem Key \glqq  agent\grqq{} festgelget, wo das Projekt gebaut werden soll und welche voraussetzungen die Build-Agents mit bringen müssen. Da keine anderen Build agents angelegt wurden, wird das Projekt direkt auf dem Jenkins server gebaut, daher wird hier nur Festgelegt, dass das Projekt in einem Docker Container gebaut werden soll. Der Docker Container wird durch das Dockerfile, welches ebenfalls im Root-Verzeichniss des Projekts eingecheckt ist erstellt. Da Jenkins nur das Dockerfile bekannt gemacht wurde, übernimmt Jenkins das Managemnt der Images, das Bedeutet unter anderem, dass Jenkins automatisch detektiert ob sich das Dockerfile geändert hat und ob ein neues Image gebaut werden muss.
+
+
+Unter dem Key \glqq  stages\grqq{} werden die Einzelschritte der Pipeline fest gelegt. In diesem Fall sind das vier Schritte: 
 \begin{enumerate}
-    \item{Build} In dieser Stage werden die scripte aufgerufen, die die Komponenten kompilieren die kompiliert werden sollen. Im anschlus wird alles was ein ausgeliefert werden soll installiert
-    \item{Test} In dieser Stage werden tests mit den Tools ctest (C Unit tests) und pytest (Python tests) ausgeführt.
-    \item{Docu} In dieser Stage wird die Dokumentation generiert.
-    \item{Deploy} In dieser Stage wird das fertig kompilierte und installierte Programm ausgeliefert und gestartet. 
+    \item{Build} In der Build-Stage wird das Script makeC.sh aufgerufen, das mit Hilfe des tools CMake (siehe \autoref{chap:tools}) die C++ und Cython Komponenten des Projekts baut und in das Verzeichnis bin installiert. Das Script wird anstelle von Jenkins Boardmitteln verwendet, das so lokal und auf dem Buildserver das gleiche Skript genutzt werden kann um das Proekt zu bauen.
+    \item{Test} In dieser Stage werden verschiedene Tests mit den Tools ctest (C Unit tests) und pytest (Python tests) und pylint (Python Linting) ausgeführt. Die Ergbnisse werden im junit-xml Format gespeichert, dammit sie später im post-Teil der Pipeline ausgewertet werden können.
+    \item{Docu} In dieser Stage wird die Dokumentation generiert. Dazu wird das Script makedoc.sh genutzt, welches diese Ausarbeitung sowie die Doxygen-Dokumentation der C++ Komponenten generiert.  
+    \item{Deploy} In dieser Stage wird das fertig kompilierte und installierte Programm ausgeliefert und gestartet. Hierzu wird das Script deploy.sh verwendet. 
+    In der Deployment-Stage wird eine \glqq when\grqq{} Bedingung eingesetzt um zu verhindern, dass andere Branches als der main-Branch in das Produktiv-System deployt werden.  
 \end{enumerate}
 
-Der Key \glqq  post\grqq{} beschreibt was nach dem Build und Deploy geschehen soll, dazu gehört das Speichern von artifakten, die behalten werden sollen und das auswerden von Testergebnissen.
+Der Key \glqq post\grqq{} beschreibt was nach dem Build und Deploy geschehen soll, dazu gehört das Speichern von artifakten, die behalten werden sollen und das auswerden von Testergebnissen.
 
 \lstinputlisting[language=json]{../../Jenkinsfile}
 
