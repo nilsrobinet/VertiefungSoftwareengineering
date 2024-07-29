@@ -1,6 +1,7 @@
 \chapter{Anwendung}
 
-In dem, in den vorangegangenen Kapiteln beschriebenen Entwicklungs flow soll eine python-kompatible Bibliothek zur Verdwendung des Eigenface Alogrithmus entwickelt werden. Um deren Effektivität demonstrieren zu können soll eine Demoanwendung in Form einer Webseite, die im Backend die Bibliothek verwendet und dem Nutzer die möglichkeit gibt die Funktionaliteten der Bibliothek aus zu probieren, bereit gestellt werden.
+Um die verwendung der \ac{CI/CD}-Pipeline zu demonstrieren soll ein Projekt angelegt werden, welches über rudimentäre Funtionen verfügt.
+Es wurde sich dazu Entschieden eine python-kompatible Bibliothek zur Verdwendung des Eigenface Alogrithmus zu entwicken. Um deren Effektivität demonstrieren zu können soll eine Demoanwendung in Form einer Webseite, die im Backend die Bibliothek verwendet und dem Nutzer die möglichkeit gibt die Funktionaliteten der Bibliothek aus zu probieren, bereit gestellt werden. Die Demo Webanwendung soll durch die \ac{CI/CD}-Pipeline in einem Docker-Container installiert und deployed werden.
 
 \section{Eigenface-Bibliothek}
 
@@ -13,4 +14,4 @@ Das Cython interface soll mit Hilfe des pytest Frameworks getestet werden. Hier 
 \section {Demo Anwendung}
 
 Die Demo Anwendung soll eine Webseite sein auf der ein interessierter Nutzer die Grundfunktionalitäten der Eigenface Bibliotheke ausprobieren kann. Um die webseite bereit zustellen und die Python-Schnittstellen der Bibliothek zu nutzen soll eine Webserver Anwendung mithilfe des freien Cherrypy Frameworks \ref{TODO} erstellt werden.
-Die demoanwdung soll mit pylint überprüft werden, um sicher zu stellen, dass der Code gängigen Codestyle Guildlines entspricht. Abweichend vom Standart soll camel-case (camelCase) anstelle con snake-case (snake\_case) verwendet werden. Hierzu wird eine pylintrc Datei im Repository bereit gestellt. Zur besseren visualisierung der Testergebnisse soll das Modul pylint-junit eingesetzt werden, dass die Ergbnisse des Lint-Vorgangs im Junit-XML format ausgibt.
+Die demoanwdung soll mit pylint überprüft werden, um sicher zu stellen, dass der Code gängigen Codestyle Guildlines entspricht. Abweichend vom Standart soll camel-case (camelCase) anstelle con snake-case (snake\_case) verwendet werden. Hierzu wird eine pylintrc Datei im Repository bereit gestellt. Zur besseren Visualisierung der Testergebnisse soll das Modul pylint-junit eingesetzt werden, dass die Ergbnisse des Lint-Vorgangs im Junit-XML format ausgibt.
