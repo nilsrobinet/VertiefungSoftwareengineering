@@ -23,3 +23,16 @@ def test_averageFaceSimple():
     expected = 256.0*256.0
     assert(np.sum(resBuffer) == expected)
     assert(np.all(resBuffer))
+    
+    
+def test_getDeviationFromAverageFace():
+    np.random.seed(0)
+    randomInput_1 = np.random.rand(255,255,8).astype(np.float32)
+    randomInput_2 = np.copy(randomInput_1)
+    
+    numpy_out =  np.array([inp.T - np.average(randomInput_1,axis=2) for inp in randomInput_2.T]).T
+    
+    pyEf = PyEigenface()
+    
+    result = pyEf.getDeviationFromAverageFace(randomInput_1);
+    breakpoint()

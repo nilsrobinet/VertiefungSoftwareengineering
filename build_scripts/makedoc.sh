@@ -17,6 +17,7 @@ cd $ROOT_DIR
 cd docu/ausarbeitung/
 pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
 pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
+pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
 cd $ROOT_DIR
 
 

@@ -4,7 +4,7 @@ Für das Projekt sollte eine \acf{CI/CD} Pipline angelegt werden. Zu diesem Zwec
 
 \section{Werkzeuge und Anwendungen}
 
-Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in \autoref{chap:git-strat}). Um das remote repository zu managen wird Github als Frontend eingesetzt. Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server läuft in einer \ac{VM}. Als Virtualisierungslösung wurde QEMU/KVM ausgeählt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
+Der Code des projektes wird mit der Versionsverwaltungssoftware GIT gemanaged (mehr zur git Strategie in \autoref{chap:git-strat}). Um das remote repository zu managen wird Github als Frontend eingesetzt (\url{https://github.com/nilsrobinet/VertiefungSoftwareengineering}). Die \ac{CI/CD} Pipeline wird durch den open source Build-Server Jenkins gemanaged. Die Build-Toolchain wird in einem Docker-Container bereit gestellt. Der Build-Server läuft in einer \ac{VM}. Als Virtualisierungslösung wurde QEMU/KVM ausgeählt. Die Builds werden mittels CMake und Bash-Scipten Konfiguriert.
 
 \section{Build-Server Setup}
 
@@ -44,9 +44,45 @@ Zusätzlich wird noch das Plugin \glqq Docker Pipeline\grqq{} benötigt, das es 
 
 \subsection{Projekt einrichtung}
 
-Unter dem Punkt \glqq new job\grqq{} wird ein neuer Multibranch Pipeline Job angelegt und Konfiguriert. Als Branch Source wird das github Repo dieses Projekts angegeben. Damit jenkins auf das Projekt zu greifen kann müsen noch Github credentials eingrtragen werden.
+Unter dem Punkt \glqq new job\grqq{} wird ein neuer Multibranch Pipeline Job angelegt und Konfiguriert.
 
-Damit Jenkins Änderungen zeitnah erkennt wir ein periodischer Trigger mit einem Intervall von einer Minute eingestellt. Danach ist das Projekt fertig konfiguriert und kann benutzt werden.
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{res/Jenkins_01.png}
+    \caption{Jenkins job erstellen.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{res/Jenkins_02.png}
+    \caption{Mutibranch Pipeline auswählen.}
+\end{figure}
+%\begin{figure}
+%    \includegraphics[scale=0.25]{res/}
+%    \caption{}
+%\end{figure}
+
+Als Branch Source wird das github Repo dieses Projekts angegeben. Damit jenkins auf das Projekt zu greifen kann müsen noch Github credentials eingrtragen werden.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{res/Jenkins_03.png}
+    \caption{Branch Source Auswahl.}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{res/Jenkins_05.png}
+    \caption{Einstellung der Branch Source.}
+\end{figure}
+
+Damit Jenkins Änderungen zeitnah erkennt wir ein periodischer Trigger mit einem Intervall von einer Minute eingestellt.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.4]{res/Jenkins_06.png}
+    \caption{Einstellung des Repository Polling Intervalls.}
+\end{figure}
+
+Danach ist das Projekt fertig konfiguriert und kann benutzt werden.
 
 Die Build und Deployment stages werden durch das im Repositroy eingecheckte Jenkinsfile konfgiuriert. Der build findet in einem Docker-Container statt der durch ein Dockerfile, das ebenfalls eingecheckt ist, erstellt wird. Das docker image wird durch Jenkins gemanaged, Jenkins kümmert sich auch darum das Dockerimage beiÄnderungen am Dockerfile neu zu generieren.
 
@@ -69,6 +105,13 @@ Unter dem Key \glqq  stages\grqq{} werden die Einzelschritte der Pipeline fest g
 
 Der Key \glqq post\grqq{} beschreibt was nach dem Build und Deploy geschehen soll, dazu gehört das Speichern von artifakten, die behalten werden sollen und das auswerden von Testergebnissen.
 
+\begin{figure}
+    \label{fig:test_results}
+    \centering
+    \includegraphics[scale=0.4]{res/Jenkins_test_results.png}
+    \caption{Testergbnisse der letzten Builds auf einem Feature-Branch nachdem die Auswertung der junit-xml Ergbinisse aktiviert wurde.}
+\end{figure}
+
 \lstinputlisting[language=json]{../../Jenkinsfile}
 
 \subsection{Buildumgebung}
@@ -79,3 +122,5 @@ Die Buildumgebung wird in einem Docker Container bereitgestellt. Das Docker Imag
 Das Image Basiert auf einem Ubuntu Image in das zusätzlich alle Tools installiert werden die im Build prozess benötigt werden.
 
 Die scripte die zum Bauen verwendet werden liegen im Verzeichnis \glqq build\_scripts\grqq{}. In diesem Verzeichnis liegen auch Scripte die das lokale Arbeiten vereinfachen sollen: Unter Anderem liegen hier scripte die das Bauen des Dockerimages automatisieren und ein Skipt das den Container interaktiv startet und das Repository mountet.
+
+Der Build an sich wird mittels CMake konfiguriert und mit Make durchgeführt. Als Kompiler für die C++ Quelldateien wird auf gcc gesetzt (siehe \autoref{chap:tools}). Als C++ Standart wird C++20 eingesetzt und der Kompiliervorgang wird mit den folgenden Flags eingestellt: \lstinline{-O3 -Wall -Werror -Wno-strict-aliasing}. Das Flag O3 bedeutet, dass mit der höchsten Optimierungsstufe gebaut werden soll. Wall heißt, dass der Kompiler alle Warnungen ausgeben soll und Werror bedeutet, dass Warnungen als Fehler behandelt werden sollen und der Build abbrechen soll, wenn eine Warnung auftritt. Mit Wno-strict-aliasing wird die strict-aliasing warnung ausgeschaltet, die einige Pointer casts verhindert. Das ist Notwendig, das für die Entwicklung einer C++ Bibliothek mit Python kompatiblen Interface Pointer aus dem Speicherbereich des Python-Interpreters manipuliert werden müssen.
