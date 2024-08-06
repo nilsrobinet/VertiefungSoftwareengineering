@@ -35,4 +35,3 @@ def test_getDeviationFromAverageFace():
     pyEf = PyEigenface()
     
     result = pyEf.getDeviationFromAverageFace(randomInput_1);
-    breakpoint()
