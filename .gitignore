@@ -1,10 +1,19 @@
 # General
-*.swp
 build/**
+bin/**
 *.log
 *.qcow2
 
 # Latex output
 docu/ausarbeitung/out
 
+#gtest
+Testing
 
+#python
+.venv
+__pycache__
+
+# Editor
+*.swp
+.zed

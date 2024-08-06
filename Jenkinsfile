@@ -10,11 +10,18 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                sh './build_scripts/makeC.sh'
             }
         }
         stage('Test') {
             steps {
                 echo 'Testing..'
+                ctest arguments: '''
+                --test-dir build/Release/test/
+                --output-junit ctest.junit.xml
+                ''', installation: 'InSearchPath'
+                sh 'pylint --output-format=junit WebappDemo/src/ > build/Release/test/pylint.junit.xml || true'
+                sh 'pytest --junit-xml=build/Release/test/pytest.junit.xml || true'
             }
         }
         stage('Docu') {
@@ -24,13 +31,22 @@ pipeline {
             }
         }
         stage('Deploy') {
+            when {
+                expression {
+                    env.BRANCH_NAME == 'main'
+                }
+            }
             steps {
                 echo 'Deploying....'
+                sh './build_scripts/deploy.sh'
             }
         }
     }
     post {
-        changed {
+        always {
+            junit 'build/Release/test/ctest.junit.xml'
+            junit 'build/Release/test/pylint.junit.xml'
+            junit 'build/Release/test/pytest.junit.xml'
             archiveArtifacts artifacts: 'build/docu/**/*.pdf', onlyIfSuccessful: true
         }
     }

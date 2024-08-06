@@ -1,0 +1,17 @@
+\chapter{Anwendung}
+
+Um die verwendung der \ac{CI/CD}-Pipeline zu demonstrieren soll ein Projekt angelegt werden, welches über rudimentäre Funtionen verfügt.
+Es wurde sich dazu Entschieden eine python-kompatible Bibliothek zur Verdwendung des Eigenface Alogrithmus zu entwicken. Um deren Effektivität demonstrieren zu können soll eine Demoanwendung in Form einer Webseite, die im Backend die Bibliothek verwendet und dem Nutzer die möglichkeit gibt die Funktionaliteten der Bibliothek auszuprobieren, bereit gestellt werden. Die Demo Webanwendung soll durch die \ac{CI/CD}-Pipeline in einem Docker-Container installiert und deployed werden.
+
+\section{Eigenface-Bibliothek}
+
+Der Eigenface Algorithmus soll aus Performance gründen in C++ implementiert werden (Für die Dokumnetation der C++ Implementierung siehe \autoref{chap:doxy}). Um das Interfacing mit Python zu vereinfachen soll, mit Hilfe der Programmiersprace Cython (Siehe \autoref{chap:tools}) eine Schnittstelle implementiert werden, die aus aus Python aufrufbaren Klassen und Funktionen besteht.
+
+Die C++ Implementation soll über Unit-Tests, die von der CI/CD Pipeline automatisiert aufgerufen werden, abgesichert werden. Hierzu soll zu jeder Funkion ein Test vorliegen. Die Unit-Tests sollen im Google Test Framework unmgesetzt werden. Für die Auswertung soll ein Junit kompatibles XML generiert werden.
+
+Das Cython interface soll mit Hilfe des pytest Frameworks getestet werden. Hier sollen nur High-Level Tests implementiert werden, die nicht unbedingt die Funktionalität der C++ Funktionen testen, sondern ihren Fokus auf die Absicherung der Schnittstellen legen. Auch die Python Tests sollen ein Junit kompatibles XML generieren.
+
+\section {Demo Anwendung}
+
+Die Demo Anwendung soll eine Webseite sein auf der ein interessierter Nutzer die Grundfunktionalitäten der Eigenface Bibliotheke ausprobieren kann. Um die Webseite bereitzustellen und die Python-Schnittstellen der Bibliothek zu nutzen soll eine Webserveranwendung mithilfe des freien Cherrypy Frameworks (\url{https://docs.cherrypy.dev/en/latest/}) erstellt werden.
+Die Demoanwdung soll mit pylint überprüft werden, um sicher zu stellen, dass der Code gängigen Codestyle Guildlines entspricht. Abweichend vom Standart soll Camel-Case (camelCase) anstelle von Snake-Case (snake\_case) verwendet werden. Hierzu wird eine pylintrc Datei im Repository bereitgestellt. Zur besseren Visualisierung der Testergebnisse soll das Modul pylint-junit eingesetzt werden, dass die Ergbnisse des Lint-Vorgangs im Junit-XML Format ausgibt.

@@ -1,8 +1,18 @@
 \chapter{Tools}
+\label{chap:tools}
 
-Um das projekt zu bauen werden einige Tools benötigt. Diese sollen hier aufgelistet und ihre Verwendung erklärt werden.
+Um das Projekt zu bauen werden einige Tools benötigt. Diese sollen hier aufgelistet und ihre Verwendung erklärt werden.
+Eine vollständige Liste der Tools die zum bauen des Projekts verwendet werden, kann den Dateien \glqq Dockerfile \grqq{} und \glqq requirements.txt \grqq{} entnommen werden.
 
 \begin{description}
-    \item[pdflatex] ist ein typesetter der verwendet wird um aus laTeX markup PDF Dokumente zu erzeugen. Es wird hier verwerndet, um dieses PDF Dokument zu erstellen.
-    \item[Marp] ist eine  umgebung um aus Markdown Präsentationen zu generieren. Es wird verwendet um für die Päsentation zur ausarbeitung ein PDF zu erstellen.
+    \item[pdflatex] ist ein Typesetter der verwendet wird um aus laTeX markup PDF Dokumente zu erzeugen. Es wird hier verwerndet, um dieses PDF Dokument zu erstellen. \cite{MANLATEX}.
+    \item[Marp] ist eine Umgebung, um aus Markdown Präsentationen zu generieren. Es wird verwendet, um für die Päsentation zur Ausarbeitung ein PDF zu erstellen \cite{MARP2024}.
+    \item[Jenkins] ist ein System zur Umsetzung von \glqq contiues integratio \grqq{} und \glqq continues deployment\grqq{} von Software \cite{JENKINS2024}.
+    \item[gcc / g++] Die GNU Compiler Collection ist eine Sammlung von Kompilern, insbesondere für die Programmiersprachen der C Familie\cite{GCC2024}. Sie wird in diesem Projekt zum übersetzen von C++ Code genutzt.
+    \item[CMake / Make] CMake ist ein Meta Build Generator, der genutzt wird um die eigentlichen Build Generatoren wie Make zu konfigurieren. Make wird genutzt um das eigentliche Bauen und Linken von Programmen zu vereinfachen\cite{CMAKE2024}.
+    \item[cython] Cython ist ein Werkzeug, das es ermöglicht C/C++ Erweiterungen für Python einfach zu programmieren. Cython kompiliert Python und die Cython-Programmiersprache in C/C++ Code, der mit allen gängigen C/C++-Kompilern kompiliert werden kann. Herauskommen CPython kompatible Shared-Library-Objekte\cite{behnel2011}.
+    \item[Docker] Docker ist eine Container-Engine, die es ermöglicht Anwendungen zu Isolieren und ihnen eine stabile Laufzeitumgebung zu garantieren. In einen Container kann eine Anwendung mit all ihren Abhängigkeiten gepackt werden. So ist ein Einfacher Transport und Auslieferung möglich\cite{merkel2014}.
+    \item[QEMU] QEMU ist ein open-source Werzeug für die Enulation und Virtualisierung von Systemen. Es unterstüzt zum einen vie vollständige Emulation einer Maschine, z.B. eines ARM Systems, auf einer anderen Architektur, z.B. x86. Zum anderen unterstüzt es die Virtualisierung des Prozessors zusammen mit einem Hypervisor wie KVM um Gastbetriebsysteme direkt auf dem Prozessor des Hosts laufen zu lassen\cite{Bellard2005}.
+    \item[KVM] KVM ist eine Virtualisierungslösung für das Linux Betriebsystem \cite{Kivity2007}.
+    \item[Git] Git ist ein quelloffenes Versionsverwaltungssystem, dass auf Basis von Snapshots Änderung an einem Projekt trackt. Es unterstüzt Branching zur prallelen Entwicklung an einem Projeket. Git ist grundsätzlich dezentral aufgebaut, da jeder Entickler eine vollständige Kopie der Repositories lokal hat \cite{Scott2014}.
 \end{description}
