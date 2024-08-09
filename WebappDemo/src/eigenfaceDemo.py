@@ -20,16 +20,20 @@ class EigenfaceDemo:
             currentDir = os.path.dirname(os.path.abspath(sys.executable))
         # disable autoreload
         cherrypy.engine.autoreload.unsubscribe()
+        cherrypy.server.socket_host = '0.0.0.0'
         # Static content config
         staticConfig= {
            '/': {
                'tools.staticdir.root': currentDir,
                'tools.staticdir.on': True,
-               'tools.staticdir.dir': './content'
+               'tools.staticdir.dir': '../content',
+               'tools.staticdir.index': 'index.html'
             }
         }
         # Mount static content handler
-        cherrypy.tree.mount(EigenfaceDispatcher(), '/', staticConfig)
+        cherrypy.tree.mount(None, '/', staticConfig)
+        # Mount eingefaceApi
+        cherrypy.tree.mount(EigenfaceDispatcher(), '/api/eigenfaces')
         # suppress traceback-info
         cherrypy.config.update({'request.show_tracebacks': False})
 
@@ -38,6 +42,3 @@ class EigenfaceDemo:
         # Start server
         cherrypy.engine.start()
         cherrypy.engine.block()
-
-if __name__ == "__main__":
-    pass

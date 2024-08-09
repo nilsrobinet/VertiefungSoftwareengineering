@@ -4,6 +4,7 @@ pipeline {
         dockerfile {
             filename 'Dockerfile'
             dir '.'
+            args '-v /var/run/docker.sock:/var/run/docker.sock -v /root/:/root/ --user root --net="host"'
         }
     }
     stages {
@@ -11,6 +12,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh './build_scripts/makeC.sh'
+                sh './build_scripts/makedemo.sh'
             }
         }
         stage('Test') {
@@ -31,11 +33,11 @@ pipeline {
             }
         }
         stage('Deploy') {
-            when {
-                expression {
-                    env.BRANCH_NAME == 'main'
-                }
-            }
+            //when {
+            //    expression {
+            //        env.BRANCH_NAME == 'main'
+            //    }
+            //}
             steps {
                 echo 'Deploying....'
                 sh './build_scripts/deploy.sh'
@@ -44,9 +46,11 @@ pipeline {
     }
     post {
         always {
+            // Postprocess test results
             junit 'build/Release/test/ctest.junit.xml'
             junit 'build/Release/test/pylint.junit.xml'
             junit 'build/Release/test/pytest.junit.xml'
+            // Archive generated documentation
             archiveArtifacts artifacts: 'build/docu/**/*.pdf', onlyIfSuccessful: true
         }
     }
