@@ -33,11 +33,11 @@ pipeline {
             }
         }
         stage('Deploy') {
-            //when {
-            //    expression {
-            //        env.BRANCH_NAME == 'main'
-            //    }
-            //}
+            when {
+                expression {
+                    env.BRANCH_NAME == 'main'
+                }
+            }
             steps {
                 echo 'Deploying....'
                 sh './build_scripts/deploy.sh'

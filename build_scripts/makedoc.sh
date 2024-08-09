@@ -27,6 +27,8 @@ pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
 pdflatex --output-directory=$ROOT_DIR/build/docu main.tex
 cd $ROOT_DIR
 
+marp docu/praesentation/praesentation.md -o build/docu/preasentation.pdf --allow-local-files
+
 
 
 #TODO: html documentation

@@ -10,6 +10,9 @@ RUN apt install -y texlive\
     texlive-science\
     texlive-bibtex-extra\
     biber
+# install presentation generator
+RUN curl -L https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -o chrome.deb && apt install -y ./chrome.deb
+RUN curl -L https://github.com/marp-team/marp-cli/releases/download/v3.4.0/marp-cli-v3.4.0-linux.tar.gz -o marp.tar.gz && tar -xf marp.tar.gz && mv marp /usr/local/bin
 # install c++ build and documentation packages
 RUN apt install -y cmake make gcc g++ doxygen graphviz
 # install python
