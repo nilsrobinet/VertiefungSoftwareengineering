@@ -97,6 +97,8 @@ Jenkins wertet die Jenkinsfile Datei automatisch aus und führt die darin beschr
 Unter dem Key \glqq stages\grqq{} werden die Einzelschritte der Pipeline fest gelegt. In diesem Fall sind das vier Schritte:
 \begin{enumerate}
     \item{Build:} In der Build-Stage wird das Skript makeC.sh aufgerufen, das mit Hilfe des tools CMake (siehe \autoref{chap:tools}) die C++ und Cython Komponenten des Projekts baut und in das Verzeichnis bin installiert. Das Skript wird anstelle von Jenkins Boardmitteln verwendet, sodass lokal wie auf dem Buildserver das gleiche Skript genutzt werden kann um das Proekt zu bauen. Dadurch können sich die Iterationszeiten bei Änderungen am C++ Quellcode verringern, da Probleme, die beim Bauen auf dem Build-Server auftreten, einfach nachgestellt werden können.
+    
+    Außerdem wird in der Build-Stage das Skript makedemo.sh aufgerufen, mit welchem ein Docker-Container gebaut wird, der die Anwendung enthält, die in der Deployment-Stage ausgeliefert wird.
     \item{Test:} In dieser Stage werden verschiedene Tests mit den Tools ctest (C Unit tests) und pytest (Python tests) und pylint (Python Linting) ausgeführt. Die Ergbnisse werden im junit-xml Format gespeichert, damit sie später im \glqq post\grqq-Teil der Pipeline ausgewertet werden können.
     \item{Docu:} In dieser Stage wird die Dokumentation generiert. Dazu wird das Skript makedoc.sh genutzt, welches diese Ausarbeitung sowie die Doxygen-Dokumentation der C++ Komponenten generiert.
     \item{Deploy:} In dieser Stage wird das fertig kompilierte und installierte Programm ausgeliefert und gestartet. Hierzu wird das Skript deploy.sh verwendet.
@@ -124,3 +126,11 @@ Das Image basiert auf einem Ubuntu Image, in das zusätzlich alle Tools installi
 Die Skripte die zum Bauen verwendet werden befinden sich im Verzeichnis \glqq build\_scripts\grqq{}. In diesem Verzeichnis liegen auch Skripte die das lokale Arbeiten vereinfachen sollen: Unter Anderem liegen hier Skripte, die das Bauen des Dockerimages automatisieren und ein Skipt, das den Container interaktiv startet und das Repository mountet.
 
 Der Build an sich wird mittels CMake konfiguriert und mit Make durchgeführt. Als Kompiler für die C++ Quelldateien wird auf gcc gesetzt (siehe \autoref{chap:tools}). Als C++ Standart wird C++20 eingesetzt und der Kompiliervorgang wird mit den folgenden Flags eingestellt: \lstinline{-O3 -Wall -Werror -Wno-strict-aliasing}. Das Flag O3 bedeutet, dass mit der höchsten Optimierungsstufe gebaut werden soll. Wall heißt, dass der Kompiler alle Warnungen ausgeben soll und Werror bedeutet, dass Warnungen als Fehler behandelt werden sollen und der Build abbrechen soll, wenn eine Warnung auftritt. Mit Wno-strict-aliasing wird die strict-aliasing warnung ausgeschaltet, die einige Pointer casts verhindert. Das ist notwendig, da für die Entwicklung einer C++ Bibliothek mit Python kompatiblen Interface Pointer aus dem Speicherbereich des Python-Interpreters manipuliert werden müssen.
+
+\subsection{Deployment}
+
+Das Deployment wird mit Hilfe des Skripts deploy.sh ausgeführt.
+
+\lstinputlisting[language=bash]{../../build_scripts/deploy.sh}
+
+Mit Hilfe des Datei-Kopierwerkzeugs \glqq rsync\grqq{} wird das Docker-Image, das in der Build-Stage gebaut wurde auf den Zielserver kopiert. Dann wird über SSH auf den Zielserver zugegriffen und das Kopierte Docker-Image geladen und gestartet. Das Docker-Image enthält die Demoanwendung und führt diese beim Start aus.
